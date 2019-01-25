@@ -1,0 +1,21 @@
+{
+  "name": "gg",
+  "version": "1.0.0",
+  "description": "Minecraft bot boilerplate for GrieferGames.net",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DerJP",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "mineflayer": "2.7.3",
+    "mineflayer-navigate": "0.0.10",
+    "vec3": "0.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "10.12.18",
+    "typescript": "3.2.2"
+  }
+}

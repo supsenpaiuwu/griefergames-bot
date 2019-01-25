@@ -1,0 +1,4 @@
+node_modules/
+sessions/
+tslint.json
+todo.txt
