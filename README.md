@@ -1,4 +1,4 @@
-#gg
+# gg
 
 A Minecraft bot made and optimized for the Minecraft network 'GrieferGames.net'.
 
