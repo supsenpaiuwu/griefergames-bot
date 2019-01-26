@@ -1,7 +1,7 @@
 {
   "name": "gg",
   "version": "1.0.0",
-  "description": "Minecraft bot boilerplate for GrieferGames.net",
+  "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -12,6 +12,7 @@
   "dependencies": {
     "mineflayer": "2.7.3",
     "mineflayer-navigate": "0.0.10",
+    "mojang": "2.2.2",
     "vec3": "0.1.3"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import * as interfaces from './interfaces';
+import { Options } from './interfaces';
 declare class Bot extends EventEmitter {
     client: any;
     private options;
@@ -10,8 +10,8 @@ declare class Bot extends EventEmitter {
     private currentChatMode;
     private chatDelay;
     private messageLastSentTime;
-    constructor(options: interfaces.Options);
-    init(): void;
+    constructor(options: Options);
+    init(): Promise<void>;
     connectCityBuild(destination: string): Promise<void>;
     sendChat(text: string, sendNext?: boolean): void;
     sendCommand(command: string, sendNext?: boolean): void;
@@ -22,5 +22,5 @@ declare class Bot extends EventEmitter {
     private processChatQueue;
     private send;
 }
-export declare function createBot(options: interfaces.Options): Bot;
+export declare function createBot(options: Options): Bot;
 export {};

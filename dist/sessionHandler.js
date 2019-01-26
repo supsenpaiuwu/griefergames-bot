@@ -5,78 +5,113 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const mojang_1 = __importDefault(require("mojang"));
 function buildPath(email) {
     return path_1.default.join(__dirname, `../sessions/session-${email.toLowerCase()}.json`);
 }
-// Attempt to load a session from its accociated file.
-function load(email) {
-    const data = fs_1.default.readFileSync(buildPath(email), 'utf-8');
-    const session = JSON.parse(data);
+async function create(email, password) {
+    try {
+        const { accessToken, clientToken, selectedProfile } = await mojang_1.default.authenticate({
+            username: email,
+            password,
+            agent: { name: 'Minecraft', version: 1 }
+        });
+        return { accessToken, clientToken, selectedProfile };
+    }
+    catch (e) {
+        throw e;
+    }
+}
+async function validate(session) {
+    try {
+        const isValid = await mojang_1.default.isValid(session);
+        return isValid;
+    }
+    catch (e) {
+        return false;
+    }
+}
+async function refresh(session) {
+    return mojang_1.default.refresh(session);
+}
+async function getSessionFromSaved(email) {
+    let session;
+    try {
+        session = await load(email);
+    }
+    catch (loadErr) {
+        throw loadErr;
+    }
+    let isValid;
+    try {
+        isValid = await validate(session);
+    }
+    catch (validationErr) {
+        isValid = false;
+    }
+    // Refresh if not valid anymore.
+    if (!isValid) {
+        try {
+            session = await refresh(session);
+        }
+        catch (refreshError) {
+            throw refreshError;
+        }
+    }
+    // Return a saved and validated session
+    // or a refreshed session.
     return session;
 }
-// Alias for "load"
-function get(email) {
-    return load(email);
+async function getValidSession(email, password) {
+    let session;
+    try {
+        session = await getSessionFromSaved(email);
+    }
+    catch (retrieveErr) {
+        // If it can't be retrieved, make a new one.
+        try {
+            session = await create(email, password);
+        }
+        catch (createErr) {
+            throw createErr;
+        }
+    }
+    try {
+        await save(session, email);
+    }
+    catch (saveErr) {
+        throw saveErr;
+    }
+    return session;
 }
-exports.get = get;
-// Attempt to save session to its own file.
-function save(session) {
-    fs_1.default.writeFileSync(buildPath(session.email), JSON.stringify(session), 'utf8');
+exports.getValidSession = getValidSession;
+function load(email) {
+    return new Promise((resolve, reject) => {
+        fs_1.default.readFile(buildPath(email), 'utf8', (e, data) => {
+            if (e) {
+                reject(e);
+                return;
+            }
+            let session;
+            try {
+                session = JSON.parse(data);
+            }
+            catch (e) {
+                reject(e);
+                return;
+            }
+            resolve(session);
+        });
+    });
 }
-exports.save = save;
-// Attempt to delete the session file accociated to given email address.
-function remove(email) {
-    fs_1.default.unlinkSync(buildPath(email));
+function save(session, email) {
+    return new Promise((resolve, reject) => {
+        fs_1.default.writeFile(buildPath(email), JSON.stringify(session), (e) => {
+            if (e) {
+                reject(e);
+                return;
+            }
+            resolve();
+        });
+    });
 }
-exports.remove = remove;
-// // Attempt to load a session from its accociated file.
-// function load(email: string): Promise<interfaces.Session> {
-//   return new Promise((resolve, reject) => {
-//     fs.readFile(buildPath(email), 'utf8', (e, data) => {
-//       if (e) {
-//         reject(e);
-//         return;
-//       }
-//       let session: interfaces.Session;
-//       try {
-//         session = JSON.parse(data);
-//       } catch (e) {
-//         reject(e);
-//         return;
-//       }
-//       resolve(session);
-//     });
-//   });
-// }
-// // Attempts to get a session from its accociated file.
-// export function get(email: string): Promise<interfaces.Session> {
-//   return new Promise((resolve, reject) => {
-//     load(email)
-//     .then(session => resolve(session))
-//     .catch(e => reject(e))
-//   });
-// }
-// // Attempts to save a session to its own file.
-// export function save(session: interfaces.Session): Promise<void> {
-//   return new Promise((resolve, reject) => {
-//     fs.writeFile(buildPath(session.email), JSON.stringify(session), 'utf8', (e) => {
-//       if (e) {
-//         reject(e);
-//         return;
-//       }
-//       resolve();
-//     });
-//   });
-// }
-// // Attempts to delete the session file accociated to the given email address.
-// export function remove(email: string): Promise<void> {
-//   return new Promise((resolve, reject) => {
-//     fs.unlink(buildPath(email), (e) => {
-//       if (e) {
-//         reject(e);
-//         return;
-//       }
-//       resolve();
-//     });
-//   });
-// }

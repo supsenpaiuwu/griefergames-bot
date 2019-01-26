@@ -1,4 +1,5 @@
 node_modules/
 sessions/
+tests/
 tslint.json
 todo.txt

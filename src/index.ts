@@ -6,12 +6,12 @@ import vec3 from 'vec3';
 import { ChatMode } from './enums';
 import { config } from './config';
 import { connectCityBuildTask } from './tasks/connectCityBuildTask';
-import * as interfaces from './interfaces';
+import { FormattedSession, Options } from './interfaces';
 import * as sessionHandler from './sessionHandler';
 
 class Bot extends EventEmitter {
   public client: any;
-  private options: interfaces.Options;
+  private options: Options;
   private username: string;
   private password: string;
   private chatQueue: string[] = [];
@@ -19,7 +19,7 @@ class Bot extends EventEmitter {
   private chatDelay = config.NORMAL_COOLDOWN;
   private messageLastSentTime: number = 0;
 
-  constructor(options: interfaces.Options) {
+  constructor(options: Options) {
     super();
     this.options = options;
     this.username = options.username;
@@ -30,7 +30,7 @@ class Bot extends EventEmitter {
   }
 
   // Call this method to start the bot.
-  public init(): void {
+  public async init(): Promise<void> {
     if (this.client) {
       return;
     }
@@ -44,25 +44,13 @@ class Bot extends EventEmitter {
 
     if (this.options.cacheSessions) {
       try {
-        const session = sessionHandler.get(this.username);
-
-        botOptions.session = {
-          accessToken: session.accessToken,
-          clientToken: session.clientToken,
-          selectedProfile: {
-            id: session.id,
-            name: session.name,
-          },
-        };
+        botOptions.session = await sessionHandler.getValidSession(this.username, this.password);
       } catch (e) {
-        console.warn(`WARNING: Could not load session for bot "${this.username}". Using credentials instead...`);
-        console.warn(e);
+        throw e;
       }
-    }
-
-    if (!botOptions.session) {
+    } else {
       botOptions.username = this.username;
-      botOptions.password = this.password;
+      botOptions.password = this.options.password;
     }
 
     this.client = mineflayer.createBot(botOptions);
@@ -171,22 +159,15 @@ class Bot extends EventEmitter {
     });
 
     this.client._client.once('session', () => {
-      const session: interfaces.Session = {
-        email: this.username,
+      const session: FormattedSession = {
         accessToken: this.client._client.session.accessToken,
         clientToken: this.client._client.session.clientToken,
-        id: this.client._client.session.selectedProfile.id,
-        name: this.client._client.session.selectedProfile.name,
+        selectedProfile: {
+          id: this.client._client.session.selectedProfile.id,
+          name: this.client._client.session.selectedProfile.name,
+        }
       };
 
-      if (this.options.cacheSessions) {
-        try {
-          sessionHandler.save(session);
-        } catch (e) {
-          console.warn(`WARNING: Could not save session for bot "${this.username}".`);
-          console.warn(e);
-        }
-      }
       this.emit('session', session);
     });
 
@@ -196,19 +177,6 @@ class Bot extends EventEmitter {
       // Absorb deserialization and buffer errors.
       if (errorText.includes('deserialization') || errorText.includes('buffer')) {
         return;
-      }
-
-      // Delete session in case of invalid token(s).
-      if (errorText.includes('invalid token')) {
-        try {
-          sessionHandler.remove(this.username);
-        } catch (e) {
-          console.warn(`WARNING: Login for bot ${this.username} 
-            using session failed, but could not delete invalid session.
-            This may cause an infinite loop.
-            If that happens, delete the session manually.`);
-          throw e;
-        }
       }
 
       this.emit('error', e);
@@ -287,7 +255,7 @@ class Bot extends EventEmitter {
   }
 }
 
-export function createBot(options: interfaces.Options): Bot {
+export function createBot(options: Options): Bot {
   const bot = new Bot(options);
   return bot;
 }
