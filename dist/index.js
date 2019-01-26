@@ -55,7 +55,6 @@ class Bot extends events_1.EventEmitter {
             botOptions.username = this.username;
             botOptions.password = this.options.password;
         }
-        console.log(botOptions);
         this.client = mineflayer_1.default.createBot(botOptions);
         this.registerEvents();
         this.installPlugins();

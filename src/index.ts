@@ -6,7 +6,7 @@ import vec3 from 'vec3';
 import { ChatMode } from './enums';
 import { config } from './config';
 import { connectCityBuildTask } from './tasks/connectCityBuildTask';
-import { FormattedSession, Options } from './interfaces';
+import { Session, Options } from './interfaces';
 import * as sessionHandler from './sessionHandler';
 
 class Bot extends EventEmitter {
@@ -159,7 +159,7 @@ class Bot extends EventEmitter {
     });
 
     this.client._client.once('session', () => {
-      const session: FormattedSession = {
+      const session: Session = {
         accessToken: this.client._client.session.accessToken,
         clientToken: this.client._client.session.clientToken,
         selectedProfile: {

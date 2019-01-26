@@ -13,7 +13,7 @@ export interface Proxy {
   password?: string;
 }
 
-export interface FormattedSession {
+export interface Session {
   accessToken: string;
   clientToken: string;
   selectedProfile: {
