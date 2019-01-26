@@ -1,13 +1,13 @@
-import { EventEmitter } from 'events';
 import mineflayer from 'mineflayer';
 import navigatePlugin from 'mineflayer-navigate';
 import vec3 from 'vec3';
+import { EventEmitter } from 'events';
 
+import { connectCityBuildTask } from './tasks/connectCityBuildTask';
+import { getValidSession } from './sessionHandler';
+import { Session, Options } from './interfaces';
 import { ChatMode } from './enums';
 import { config } from './config';
-import { connectCityBuildTask } from './tasks/connectCityBuildTask';
-import { Session, Options } from './interfaces';
-import * as sessionHandler from './sessionHandler';
 
 class Bot extends EventEmitter {
   public client: any;
@@ -44,13 +44,13 @@ class Bot extends EventEmitter {
 
     if (this.options.cacheSessions) {
       try {
-        botOptions.session = await sessionHandler.getValidSession(this.username, this.password);
+        botOptions.session = await getValidSession(this.username, this.password);
       } catch (e) {
         throw e;
       }
     } else {
       botOptions.username = this.username;
-      botOptions.password = this.options.password;
+      botOptions.password = this.password;
     }
 
     this.client = mineflayer.createBot(botOptions);
@@ -159,14 +159,7 @@ class Bot extends EventEmitter {
     });
 
     this.client._client.once('session', () => {
-      const session: Session = {
-        accessToken: this.client._client.session.accessToken,
-        clientToken: this.client._client.session.clientToken,
-        selectedProfile: {
-          id: this.client._client.session.selectedProfile.id,
-          name: this.client._client.session.selectedProfile.name,
-        }
-      };
+      const session: Session = this.client._client.session;
 
       this.emit('session', session);
     });

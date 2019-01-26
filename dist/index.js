@@ -2,22 +2,15 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const events_1 = require("events");
 const mineflayer_1 = __importDefault(require("mineflayer"));
 const mineflayer_navigate_1 = __importDefault(require("mineflayer-navigate"));
 const vec3_1 = __importDefault(require("vec3"));
+const events_1 = require("events");
+const connectCityBuildTask_1 = require("./tasks/connectCityBuildTask");
+const sessionHandler_1 = require("./sessionHandler");
 const enums_1 = require("./enums");
 const config_1 = require("./config");
-const connectCityBuildTask_1 = require("./tasks/connectCityBuildTask");
-const sessionHandler = __importStar(require("./sessionHandler"));
 class Bot extends events_1.EventEmitter {
     constructor(options) {
         super();
@@ -45,7 +38,7 @@ class Bot extends events_1.EventEmitter {
         };
         if (this.options.cacheSessions) {
             try {
-                botOptions.session = await sessionHandler.getValidSession(this.username, this.password);
+                botOptions.session = await sessionHandler_1.getValidSession(this.username, this.password);
             }
             catch (e) {
                 throw e;
@@ -53,7 +46,7 @@ class Bot extends events_1.EventEmitter {
         }
         else {
             botOptions.username = this.username;
-            botOptions.password = this.options.password;
+            botOptions.password = this.password;
         }
         this.client = mineflayer_1.default.createBot(botOptions);
         this.registerEvents();
@@ -143,14 +136,7 @@ class Bot extends events_1.EventEmitter {
             });
         });
         this.client._client.once('session', () => {
-            const session = {
-                accessToken: this.client._client.session.accessToken,
-                clientToken: this.client._client.session.clientToken,
-                selectedProfile: {
-                    id: this.client._client.session.selectedProfile.id,
-                    name: this.client._client.session.selectedProfile.name,
-                }
-            };
+            const session = this.client._client.session;
             this.emit('session', session);
         });
         this.client.on('error', (e) => {

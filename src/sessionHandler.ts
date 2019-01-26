@@ -13,7 +13,7 @@ async function create(email: string, password: string): Promise<Session> {
     const { accessToken, clientToken, selectedProfile } = await mojang.authenticate({
       username: email,
       password,
-      agent: { name: 'Minecraft', version: 1 }
+      agent: { name: 'Minecraft', version: 1 },
     });
 
     return { accessToken, clientToken, selectedProfile };
@@ -99,7 +99,7 @@ function load(email: string): Promise<Session> {
 
       try {
         session = JSON.parse(data);
-      } catch(e) {
+      } catch (e) {
         reject(e);
         return;
       }
