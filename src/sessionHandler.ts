@@ -2,13 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import mojang from 'mojang';
 
-import { FormattedSession } from './interfaces';
+import { Session } from './interfaces';
 
 function buildPath(email: string): string {
   return path.join(__dirname, `../sessions/session-${email.toLowerCase()}.json`);
 }
 
-async function create(email: string, password: string): Promise<FormattedSession> {
+async function create(email: string, password: string): Promise<Session> {
   try {
     const { accessToken, clientToken, selectedProfile } = await mojang.authenticate({
       username: email,
@@ -22,7 +22,7 @@ async function create(email: string, password: string): Promise<FormattedSession
   }
 }
 
-async function validate(session: FormattedSession): Promise<boolean> {
+async function validate(session: Session): Promise<boolean> {
   try {
     const isValid = await mojang.isValid(session);
 
@@ -32,11 +32,11 @@ async function validate(session: FormattedSession): Promise<boolean> {
   }
 }
 
-async function refresh(session: FormattedSession): Promise<FormattedSession> {
+async function refresh(session: Session): Promise<Session> {
   return mojang.refresh(session);
 }
 
-async function getSessionFromSaved(email: string): Promise<FormattedSession> {
+async function getSessionFromSaved(email: string): Promise<Session> {
   let session;
   try {
     session = await load(email);
@@ -65,7 +65,7 @@ async function getSessionFromSaved(email: string): Promise<FormattedSession> {
   return session;
 }
 
-export async function getValidSession(email: string, password: string): Promise<FormattedSession> {
+export async function getValidSession(email: string, password: string): Promise<Session> {
   let session;
   try {
     session = await getSessionFromSaved(email);
@@ -87,7 +87,7 @@ export async function getValidSession(email: string, password: string): Promise<
   return session;
 }
 
-function load(email: string): Promise<FormattedSession> {
+function load(email: string): Promise<Session> {
   return new Promise((resolve, reject) => {
     fs.readFile(buildPath(email), 'utf8', (e, data) => {
       if (e) {
@@ -95,7 +95,7 @@ function load(email: string): Promise<FormattedSession> {
         return;
       }
 
-      let session: FormattedSession;
+      let session: Session;
 
       try {
         session = JSON.parse(data);
@@ -109,7 +109,7 @@ function load(email: string): Promise<FormattedSession> {
   });
 }
 
-function save(session: FormattedSession, email: string): Promise<void> {
+function save(session: Session, email: string): Promise<void> {
   return new Promise((resolve, reject) => {
     fs.writeFile(buildPath(email), JSON.stringify(session), (e) => {
       if (e) {

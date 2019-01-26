@@ -10,7 +10,7 @@ export interface Proxy {
     username?: string;
     password?: string;
 }
-export interface FormattedSession {
+export interface Session {
     accessToken: string;
     clientToken: string;
     selectedProfile: {
