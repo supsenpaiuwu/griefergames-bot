@@ -1,14 +1,28 @@
 {
   "name": "gg",
   "version": "1.0.0",
-  "description": "",
+  "description": "Easily create bots optimized for GrieferGames.net",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "DerJP",
-  "license": "UNLICENSED",
+  "homepage": "https://github.com/derjp/gg#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/derjp/gg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/derjp/gg/issues"
+  },
+  "keywords": [
+    "bot",
+    "client",
+    "minecraft",
+    "griefergames"
+  ],
+  "author": "DerJP <0x13156e9@gmail.com>",
+  "license": "ISC",
   "dependencies": {
     "mineflayer": "2.7.3",
     "mineflayer-navigate": "0.0.10",

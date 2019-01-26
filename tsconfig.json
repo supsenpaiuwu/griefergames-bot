@@ -10,6 +10,7 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
+    "removeComments": true
   },
   "include": [
     "./src/**/*"

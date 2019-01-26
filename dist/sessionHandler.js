@@ -14,7 +14,7 @@ async function create(email, password) {
         const { accessToken, clientToken, selectedProfile } = await mojang_1.default.authenticate({
             username: email,
             password,
-            agent: { name: 'Minecraft', version: 1 }
+            agent: { name: 'Minecraft', version: 1 },
         });
         return { accessToken, clientToken, selectedProfile };
     }
@@ -49,7 +49,6 @@ async function getSessionFromSaved(email) {
     catch (validationErr) {
         isValid = false;
     }
-    // Refresh if not valid anymore.
     if (!isValid) {
         try {
             session = await refresh(session);
@@ -58,8 +57,6 @@ async function getSessionFromSaved(email) {
             throw refreshError;
         }
     }
-    // Return a saved and validated session
-    // or a refreshed session.
     return session;
 }
 async function getValidSession(email, password) {
@@ -68,7 +65,6 @@ async function getValidSession(email, password) {
         session = await getSessionFromSaved(email);
     }
     catch (retrieveErr) {
-        // If it can't be retrieved, make a new one.
         try {
             session = await create(email, password);
         }
