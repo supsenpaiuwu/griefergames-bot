@@ -42,13 +42,7 @@ async function getSessionFromSaved(email) {
     catch (loadErr) {
         throw loadErr;
     }
-    let isValid;
-    try {
-        isValid = await validate(session);
-    }
-    catch (validationErr) {
-        isValid = false;
-    }
+    const isValid = await validate(session);
     if (!isValid) {
         try {
             session = await refresh(session);

@@ -1,1 +1,2 @@
-export declare function connectCityBuildTask(bot: any, portalPos: any, portalFrontPos: any): Promise<void>;
+declare function run(bot: any, portalPos: any, portalFrontPos: any): Promise<void>;
+export { run as connectCityBuildTask };

@@ -1,7 +1,7 @@
 export const config = {
   NORMAL_COOLDOWN: 3050,
   PORTAL_COOLDOWN: 12000,
-  PORTAL_TIMEOUT: 30000,
+  PORTAL_TIMEOUT: 40000,
   SLOW_COOLDOWN: 4050,
   MSG_REGEXP: /^\[(\w+) \| (\w+) -> mir\] (.+)/,
   PAY_REGEXP: /^(\w+) \| (\w+) hat dir \$([^\s]+) gegeben\./,

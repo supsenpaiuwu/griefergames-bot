@@ -25,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "mineflayer": "2.7.3",
-    "mineflayer-navigate": "0.0.10",
+    "mineflayer-navigate-promise": "0.2.0",
     "mojang": "2.2.2",
     "vec3": "0.1.3"
   },

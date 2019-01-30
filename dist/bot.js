@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mineflayer_1 = __importDefault(require("mineflayer"));
-const mineflayer_navigate_1 = __importDefault(require("mineflayer-navigate"));
+const mineflayer_navigate_promise_1 = __importDefault(require("mineflayer-navigate-promise"));
 const vec3_1 = __importDefault(require("vec3"));
 const events_1 = require("events");
 const connectCityBuildTask_1 = require("./tasks/connectCityBuildTask");
@@ -63,12 +63,16 @@ class Bot extends events_1.EventEmitter {
                 portalPos = vec3_1.default(317, 117, 271);
                 portalFrontPos = vec3_1.default(319, 116, 273);
                 break;
+            case 'cb8':
+                portalPos = vec3_1.default(332, 117, 289);
+                portalFrontPos = vec3_1.default(330, 116, 287);
+                break;
             case 'extreme':
                 portalPos = vec3_1.default(306, 117, 286);
                 portalFrontPos = vec3_1.default(308, 116, 287);
                 break;
             default:
-                return Promise.reject(new Error(`Not implemented yet ("${destination}").`));
+                return Promise.reject(new Error(`Not implemented yet ('${destination}').`));
         }
         return connectCityBuildTask_1.connectCityBuildTask(this, portalPos, portalFrontPos);
     }
@@ -81,10 +85,14 @@ class Bot extends events_1.EventEmitter {
     sendMsg(re, text, sendNext) {
         this.send(`/msg ${re} ${text}`, sendNext);
     }
+    navigateTo(position) {
+        return this.client.navigate.promise.to(position);
+    }
     installPlugins() {
-        mineflayer_navigate_1.default(mineflayer_1.default)(this.client);
-        this.client.navigate.blocksToAvoid[171] = true;
+        mineflayer_navigate_promise_1.default(mineflayer_1.default)(this.client);
         this.client.navigate.blocksToAvoid[44] = true;
+        this.client.navigate.blocksToAvoid[156] = true;
+        this.client.navigate.blocksToAvoid[171] = true;
     }
     registerEvents() {
         const forward = (e) => {

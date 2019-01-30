@@ -3,70 +3,78 @@ import { config } from '../config';
 
 // Overly complicated code due to bad Mineflayer physics...
 
-export function connectCityBuildTask(bot, portalPos, portalFrontPos): Promise<void> {
+function delay(amount): Promise<void> {
+  return new Promise(resolve => {
+    setTimeout(resolve, amount);
+  });
+}
+
+function waitForSpawn(bot): Promise<void> {
+  return new Promise(resolve => {
+    bot.client.once('spawn', () => {
+      resolve();
+    });
+  });
+}
+
+const startPos = vec3(324, 117, 277);
+
+function run(bot, portalPos, portalFrontPos): Promise<void> {
   return new Promise((resolve, reject) => {
 
     const portalTimeout = setTimeout(() => {
       reject(new Error('Stuck in connector.'));
     }, config.PORTAL_TIMEOUT);
 
-    bot.client.once('spawn', () => {
-
-      // Wait for portal cooldown to pass before starting
-      setTimeout(() => {
-        setup();
-      }, config.PORTAL_COOLDOWN);
-
-      // Walk to start position
-      function setup() {
-        const startPos = vec3(324, 117, 277);
-        bot.client.navigate.once('arrived', () => {
-          setTimeout(() => {
-            jumpDown();
-          }, 500);
-        });
-        bot.client.navigate.to(startPos);
-      }
-
-      // Jump down from the platform
-      function jumpDown() {
-        bot.client.lookAt(vec3(1, 0, 1), true);
-        bot.client.setControlState('sprint', true);
-        bot.client.setControlState('jump', true);
-        bot.client.setControlState('forward', true);
-        setTimeout(() => {
-          bot.client.setControlState('jump', false);
-        }, 200);
-        setTimeout(() => {
-          bot.client.clearControlStates();
-          navigateToPortal();
-        }, 500);
-      }
-
-      // Walk to the front of the portal
-      function navigateToPortal() {
-        bot.client.navigate.once('arrived', () => {
-          setTimeout(() => {
-            enterPortal();
-          }, 1000);
-        });
-        bot.client.navigate.to(portalFrontPos);
-      }
-
-      // Jump into the portal
-      function enterPortal() {
-        bot.client.lookAt(portalPos, true);
-        bot.client.setControlState('sprint', true);
-        bot.client.setControlState('jump', true);
-        bot.client.setControlState('forward', true);
-        bot.client.once('spawn', () => {
-          bot.client.clearControlStates();
-          clearTimeout(portalTimeout);
-          resolve();
-        });
-      }
-
+    waitForSpawn(bot)
+    .then(() => {
+      return delay(3000);
+    })
+    .then(() => {
+      return bot.client.navigate.promise.to(startPos);
+    })
+    .then(() => {
+      return delay(2000);
+    })
+    .then(() => {
+      bot.client.lookAt(vec3(1, 0, 1), true);
+      bot.client.setControlState('sprint', true);
+      bot.client.setControlState('jump', true);
+      bot.client.setControlState('forward', true);
+      return delay(200);
+    })
+    .then(() => {
+      bot.client.setControlState('jump', false);
+      return delay(300);
+    })
+    .then(() => {
+      bot.client.clearControlStates();
+      return delay(2000);
+    })
+    .then(() => {
+      return bot.client.navigate.to(portalFrontPos);
+    })
+    .then(() => {
+      return delay(2000);
+    })
+    .then(() => {
+      bot.client.lookAt(portalPos, true);
+      bot.client.setControlState('sprint', true);
+      bot.client.setControlState('jump', true);
+      bot.client.setControlState('forward', true);
+      return waitForSpawn(bot);
+    })
+    .then(() => {
+      bot.client.clearControlStates();
+      clearTimeout(portalTimeout);
+      resolve();
+    })
+    .catch(() => {
+      reject(new Error('Stuck in connector.'));
     });
     bot.client.chat('/portal');
+
   });
 }
+
+export { run as connectCityBuildTask };

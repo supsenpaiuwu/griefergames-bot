@@ -1,5 +1,5 @@
 import mineflayer from 'mineflayer';
-import navigatePlugin from 'mineflayer-navigate';
+import navigatePlugin from 'mineflayer-navigate-promise';
 import vec3 from 'vec3';
 import { EventEmitter } from 'events';
 
@@ -71,12 +71,16 @@ class Bot extends EventEmitter {
         portalPos = vec3(317, 117, 271);
         portalFrontPos = vec3(319, 116, 273);
         break;
+      case 'cb8':
+        portalPos = vec3(332, 117, 289);
+        portalFrontPos = vec3(330, 116, 287);
+        break;
       case 'extreme':
         portalPos = vec3(306, 117, 286);
         portalFrontPos = vec3(308, 116, 287);
         break;
       default:
-        return Promise.reject(new Error(`Not implemented yet ("${destination}").`));
+        return Promise.reject(new Error(`Not implemented yet ('${destination}').`));
     }
     return connectCityBuildTask(this, portalPos, portalFrontPos);
   }
@@ -93,10 +97,15 @@ class Bot extends EventEmitter {
     this.send(`/msg ${re} ${text}`, sendNext);
   }
 
+  public navigateTo(position): Promise<void> {
+    return this.client.navigate.promise.to(position);
+  }
+
   private installPlugins(): void {
     navigatePlugin(mineflayer)(this.client);
-    this.client.navigate.blocksToAvoid[171] = true;
     this.client.navigate.blocksToAvoid[44] = true;
+    this.client.navigate.blocksToAvoid[156] = true;
+    this.client.navigate.blocksToAvoid[171] = true;
   }
 
   private registerEvents(): void {

@@ -44,12 +44,8 @@ async function getSessionFromSaved(email: string): Promise<Session> {
     throw loadErr;
   }
 
-  let isValid;
-  try {
-    isValid = await validate(session);
-  } catch (validationErr) {
-    isValid = false;
-  }
+  // Can only resolve so we don't need a try-catch block.
+  const isValid = await validate(session);
 
   // Refresh if not valid anymore.
   if (!isValid) {
