@@ -17,11 +17,12 @@ declare class Bot extends EventEmitter {
     sendCommand(command: string, sendNext?: boolean): void;
     sendMsg(re: string, text: string, sendNext?: boolean): void;
     navigateTo(position: any): Promise<void>;
+    private loadConnectorOptions;
     private installPlugins;
     private registerEvents;
     private getTimeSinceLastMessage;
     private processChatQueue;
     private send;
 }
-export declare function createBot(options: Options): Bot;
-export {};
+declare function createBot(options: Options): Bot;
+export { createBot, Bot, };

@@ -1,13 +1,14 @@
 import mineflayer from 'mineflayer';
 import navigatePlugin from 'mineflayer-navigate-promise';
-import vec3 from 'vec3';
+import fs from 'fs';
+import path from 'path';
 import { EventEmitter } from 'events';
 
-import { connectCityBuildTask } from './tasks/connectCityBuildTask';
 import { getValidSession } from './sessionHandler';
-import { Session, Options } from './interfaces';
+import { Session, Options, ConnectorOptions } from './interfaces';
 import { ChatMode } from './enums';
 import { config } from './config';
+import { connectorTask } from './tasks/connector';
 
 class Bot extends EventEmitter {
   public client: any;
@@ -59,30 +60,21 @@ class Bot extends EventEmitter {
     this.installPlugins();
   }
 
-  public connectCityBuild(destination: string): Promise<void> {
-    let portalPos: any;
-    let portalFrontPos: any;
-    switch (destination.trim().toLowerCase()) {
-      case 'cb1':
-        portalPos = vec3(312, 117, 271);
-        portalFrontPos = vec3(314, 116, 273);
-        break;
-      case 'cb2':
-        portalPos = vec3(317, 117, 271);
-        portalFrontPos = vec3(319, 116, 273);
-        break;
-      case 'cb8':
-        portalPos = vec3(332, 117, 289);
-        portalFrontPos = vec3(330, 116, 287);
-        break;
-      case 'extreme':
-        portalPos = vec3(306, 117, 286);
-        portalFrontPos = vec3(308, 116, 287);
-        break;
-      default:
-        return Promise.reject(new Error(`Not implemented yet ('${destination}').`));
+  public async connectCityBuild(destination: string): Promise<void> {
+    const dest = destination.trim().toLowerCase();
+
+    let connectorOptions: ConnectorOptions;
+    try {
+      connectorOptions = await this.loadConnectorOptions(dest);
+    } catch (e) {
+      throw new Error(`Could not load options for given CityBuild ('${dest}').`);
     }
-    return connectCityBuildTask(this, portalPos, portalFrontPos);
+
+    try {
+      await connectorTask(this, connectorOptions);
+    } catch (e) {
+      throw e;
+    }
   }
 
   public sendChat(text: string, sendNext?: boolean): void {
@@ -99,6 +91,19 @@ class Bot extends EventEmitter {
 
   public navigateTo(position): Promise<void> {
     return this.client.navigate.promise.to(position);
+  }
+
+  private async loadConnectorOptions(dest: string): Promise<ConnectorOptions> {
+    const file = path.join(__dirname, `../paths/${dest.trim().toLowerCase()}.json`);
+
+    let connectorOptions: ConnectorOptions;
+    try {
+      connectorOptions = await readJsonFile(file);
+    } catch (e) {
+      throw e;
+    }
+
+    return connectorOptions;
   }
 
   private installPlugins(): void {
@@ -257,7 +262,33 @@ class Bot extends EventEmitter {
   }
 }
 
-export function createBot(options: Options): Bot {
+function readJsonFile(filePath: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (e, data) => {
+      if (e) {
+        reject(e);
+        return;
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(data);
+      } catch (e) {
+        reject(e);
+        return;
+      }
+
+      resolve(parsed);
+    });
+  });
+}
+
+function createBot(options: Options): Bot {
   const bot = new Bot(options);
   return bot;
 }
+
+export {
+  createBot,
+  Bot,
+};

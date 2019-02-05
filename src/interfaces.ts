@@ -21,3 +21,22 @@ export interface Session {
     name: string;
   };
 }
+
+// export interface PathPacket {
+//   data: any;
+//   delta: number;
+//   name: string;
+// }
+
+export interface Position {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface ConnectorOptions {
+  name: string;
+  start: number[];
+  front: number[];
+  portal: number[];
+}

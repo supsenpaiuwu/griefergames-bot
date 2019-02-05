@@ -1,2 +1,2 @@
 import { createBot } from './bot';
-export { createBot };
+export { createBot, };

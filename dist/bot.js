@@ -5,12 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mineflayer_1 = __importDefault(require("mineflayer"));
 const mineflayer_navigate_promise_1 = __importDefault(require("mineflayer-navigate-promise"));
-const vec3_1 = __importDefault(require("vec3"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const events_1 = require("events");
-const connectCityBuildTask_1 = require("./tasks/connectCityBuildTask");
 const sessionHandler_1 = require("./sessionHandler");
 const enums_1 = require("./enums");
 const config_1 = require("./config");
+const connector_1 = require("./tasks/connector");
 class Bot extends events_1.EventEmitter {
     constructor(options) {
         super();
@@ -51,30 +52,21 @@ class Bot extends events_1.EventEmitter {
         this.registerEvents();
         this.installPlugins();
     }
-    connectCityBuild(destination) {
-        let portalPos;
-        let portalFrontPos;
-        switch (destination.trim().toLowerCase()) {
-            case 'cb1':
-                portalPos = vec3_1.default(312, 117, 271);
-                portalFrontPos = vec3_1.default(314, 116, 273);
-                break;
-            case 'cb2':
-                portalPos = vec3_1.default(317, 117, 271);
-                portalFrontPos = vec3_1.default(319, 116, 273);
-                break;
-            case 'cb8':
-                portalPos = vec3_1.default(332, 117, 289);
-                portalFrontPos = vec3_1.default(330, 116, 287);
-                break;
-            case 'extreme':
-                portalPos = vec3_1.default(306, 117, 286);
-                portalFrontPos = vec3_1.default(308, 116, 287);
-                break;
-            default:
-                return Promise.reject(new Error(`Not implemented yet ('${destination}').`));
+    async connectCityBuild(destination) {
+        const dest = destination.trim().toLowerCase();
+        let connectorOptions;
+        try {
+            connectorOptions = await this.loadConnectorOptions(dest);
         }
-        return connectCityBuildTask_1.connectCityBuildTask(this, portalPos, portalFrontPos);
+        catch (e) {
+            throw new Error(`Could not load options for given CityBuild ('${dest}').`);
+        }
+        try {
+            await connector_1.connectorTask(this, connectorOptions);
+        }
+        catch (e) {
+            throw e;
+        }
     }
     sendChat(text, sendNext) {
         this.send(text, sendNext);
@@ -87,6 +79,17 @@ class Bot extends events_1.EventEmitter {
     }
     navigateTo(position) {
         return this.client.navigate.promise.to(position);
+    }
+    async loadConnectorOptions(dest) {
+        const file = path_1.default.join(__dirname, `../paths/${dest.trim().toLowerCase()}.json`);
+        let connectorOptions;
+        try {
+            connectorOptions = await readJsonFile(file);
+        }
+        catch (e) {
+            throw e;
+        }
+        return connectorOptions;
     }
     installPlugins() {
         mineflayer_navigate_promise_1.default(mineflayer_1.default)(this.client);
@@ -206,6 +209,26 @@ class Bot extends events_1.EventEmitter {
         }, untilNext);
         this.chatQueue.push(text);
     }
+}
+exports.Bot = Bot;
+function readJsonFile(filePath) {
+    return new Promise((resolve, reject) => {
+        fs_1.default.readFile(filePath, 'utf8', (e, data) => {
+            if (e) {
+                reject(e);
+                return;
+            }
+            let parsed;
+            try {
+                parsed = JSON.parse(data);
+            }
+            catch (e) {
+                reject(e);
+                return;
+            }
+            resolve(parsed);
+        });
+    });
 }
 function createBot(options) {
     const bot = new Bot(options);
