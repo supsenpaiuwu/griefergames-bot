@@ -21,6 +21,16 @@ Find this module on [npm](https://www.npmjs.com/package/griefergames).
 * Make use of the complete feature set of Mineflayer - this package only adds functionality
 * Clean and focused
 
+## Installation
+
+This is a [Node.js](https://nodejs.org/) module available through the [npm registry](https://www.npmjs.com/).
+
+Installation is done using the [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+
+```bash
+$ npm install griefergames
+```
+
 ## Quick Start
 
 Importing the package:
