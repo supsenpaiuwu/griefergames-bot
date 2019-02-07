@@ -34,7 +34,11 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
 
   const [startX, startY, startZ] = options.start;
   const startPos = vec3(startX, startY, startZ);
-  await bot.client.navigate.promise.to(startPos);
+  try {
+    await bot.client.navigate.promise.to(startPos);
+  } catch (e) {
+    throw new Error('Stuck in connector.');
+  }
   await delay(500);
 
   const [portalX, portalY, portalZ] = options.portal;
@@ -53,13 +57,17 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
 
   const [frontX, frontY, frontZ] = options.front;
   const frontPos = vec3(frontX, frontY, frontZ);
-  await bot.client.navigate.promise.to(frontPos);
+  try {
+    await bot.client.navigate.promise.to(frontPos);
+  } catch (e) {
+    throw new Error('Stuck in connector.');
+  }
   await delay(2000);
 
   bot.client.lookAt(portalPos, true);
   bot.client.setControlState('sprint', true);
-  bot.client.setControlState('jump', true);
   bot.client.setControlState('forward', true);
+  bot.client.setControlState('jump', true);
   await waitForSpawn(bot);
 
   bot.client.clearControlStates();

@@ -9,6 +9,7 @@ import { Session, Options, ConnectorOptions } from './interfaces';
 import { ChatMode } from './enums';
 import { config } from './config';
 import { connectorTask } from './tasks/connector';
+import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
 class Bot extends EventEmitter {
   public client: any;
@@ -127,17 +128,11 @@ class Bot extends EventEmitter {
     forward('end');
 
     this.client.chatAddPattern(config.MSG_REGEXP, 'msg');
-    this.client.chatAddPattern(config.PAY_REGEXP, 'pay');
     this.client.chatAddPattern(config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
     this.client.chatAddPattern(config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
 
     this.client.on('msg', (rank: string, username: string, message: string) => {
       this.emit('msg', rank, username, message);
-    });
-
-    this.client.on('pay', (rank: string, username: string, amount: string) => {
-      const parsedAmount = parseInt(amount.replace(/,/g, ''), 10);
-      this.emit('pay', rank, username, parsedAmount);
     });
 
     this.client.on('chatModeAlert', (rank: string, username: string, change: string) => {
@@ -168,6 +163,8 @@ class Bot extends EventEmitter {
 
     this.client.on('connect', () => {
       this.client.once('spawn', () => {
+        // Ready once fully connected
+        // and spawned in hub.
         this.emit('ready');
       });
     });
@@ -189,11 +186,25 @@ class Bot extends EventEmitter {
       this.emit('error', e);
     });
 
-    if (this.options.logMessages) {
-      this.client.on('message', (message) => {
+    this.client.on('message', (message) => {
+      if (this.options.logMessages) {
         console.log(message.toAnsi());
-      });
-    }
+      }
+
+      // Convert JSON chat to a coded string...
+      // Trim just to be safe with our RegExp.
+      const colorCodedText = jsonToCodedText(message.json).trim();
+      const text = stripCodes(colorCodedText);
+
+      const payMatches = colorCodedText.match(config.PAY_REGEXP);
+      if (payMatches) {
+        // Received money.
+        const rank = payMatches[1];
+        const username = payMatches[2];
+        const amount = parseInt(payMatches[3].replace(/,/g, ''), 10);
+        this.emit('pay', rank, username, amount, text, colorCodedText);
+      }
+    });
   }
 
   private getTimeSinceLastMessage(): number {

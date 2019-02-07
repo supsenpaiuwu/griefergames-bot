@@ -12,6 +12,7 @@ const sessionHandler_1 = require("./sessionHandler");
 const enums_1 = require("./enums");
 const config_1 = require("./config");
 const connector_1 = require("./tasks/connector");
+const minecraftUtil_1 = require("./util/minecraftUtil");
 class Bot extends events_1.EventEmitter {
     constructor(options) {
         super();
@@ -109,15 +110,10 @@ class Bot extends events_1.EventEmitter {
         forward('death');
         forward('end');
         this.client.chatAddPattern(config_1.config.MSG_REGEXP, 'msg');
-        this.client.chatAddPattern(config_1.config.PAY_REGEXP, 'pay');
         this.client.chatAddPattern(config_1.config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
         this.client.chatAddPattern(config_1.config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
         this.client.on('msg', (rank, username, message) => {
             this.emit('msg', rank, username, message);
-        });
-        this.client.on('pay', (rank, username, amount) => {
-            const parsedAmount = parseInt(amount.replace(/,/g, ''), 10);
-            this.emit('pay', rank, username, parsedAmount);
         });
         this.client.on('chatModeAlert', (rank, username, change) => {
             switch (change) {
@@ -155,11 +151,20 @@ class Bot extends events_1.EventEmitter {
             }
             this.emit('error', e);
         });
-        if (this.options.logMessages) {
-            this.client.on('message', (message) => {
+        this.client.on('message', (message) => {
+            if (this.options.logMessages) {
                 console.log(message.toAnsi());
-            });
-        }
+            }
+            const colorCodedText = minecraftUtil_1.jsonToCodedText(message.json).trim();
+            const text = minecraftUtil_1.stripCodes(colorCodedText);
+            const payMatches = colorCodedText.match(config_1.config.PAY_REGEXP);
+            if (payMatches) {
+                const rank = payMatches[1];
+                const username = payMatches[2];
+                const amount = parseInt(payMatches[3].replace(/,/g, ''), 10);
+                this.emit('pay', rank, username, amount, text, colorCodedText);
+            }
+        });
     }
     getTimeSinceLastMessage() {
         return Date.now() - this.messageLastSentTime;

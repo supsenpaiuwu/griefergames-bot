@@ -24,7 +24,12 @@ async function run(bot, options) {
     await delay(3000);
     const [startX, startY, startZ] = options.start;
     const startPos = vec3_1.default(startX, startY, startZ);
-    await bot.client.navigate.promise.to(startPos);
+    try {
+        await bot.client.navigate.promise.to(startPos);
+    }
+    catch (e) {
+        throw new Error('Stuck in connector.');
+    }
     await delay(500);
     const [portalX, portalY, portalZ] = options.portal;
     const portalPos = vec3_1.default(portalX, portalY, portalZ);
@@ -38,12 +43,17 @@ async function run(bot, options) {
     await delay(2000);
     const [frontX, frontY, frontZ] = options.front;
     const frontPos = vec3_1.default(frontX, frontY, frontZ);
-    await bot.client.navigate.promise.to(frontPos);
+    try {
+        await bot.client.navigate.promise.to(frontPos);
+    }
+    catch (e) {
+        throw new Error('Stuck in connector.');
+    }
     await delay(2000);
     bot.client.lookAt(portalPos, true);
     bot.client.setControlState('sprint', true);
-    bot.client.setControlState('jump', true);
     bot.client.setControlState('forward', true);
+    bot.client.setControlState('jump', true);
     await waitForSpawn(bot);
     bot.client.clearControlStates();
     clearTimeout(timeout);

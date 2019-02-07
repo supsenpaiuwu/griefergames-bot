@@ -17,6 +17,7 @@ Find this module on [npm](https://www.npmjs.com/package/griefergames).
 * Easily connect on every "CityBuild" server using a single method
 * Optimized chat queue - adapts to chat mode and other factors
 * Automatic session caching and refreshing
+* Fake money filtering
 * Useful events - react on private messages, money transfers etc
 * Make use of the complete feature set of Mineflayer - this package only adds functionality
 * Clean and focused
@@ -83,5 +84,4 @@ If you're stuck, don't hesitate to open a new issue directly on [GitHub](https:/
 
 ## Roadmap
 
-* Filter fake money transfers
 * Implement a more reliable "CityBuild" connection method (sending pre-recorded packets directly)
