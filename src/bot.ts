@@ -90,6 +90,10 @@ class Bot extends EventEmitter {
     this.send(`/msg ${re} ${text}`, sendNext);
   }
 
+  public pay(re: string, amount: number): void {
+    this.sendCommand(`pay ${re} ${amount}`);
+  }
+
   public navigateTo(position): Promise<void> {
     return this.client.navigate.promise.to(position);
   }
@@ -130,6 +134,7 @@ class Bot extends EventEmitter {
     this.client.chatAddPattern(config.MSG_REGEXP, 'msg');
     this.client.chatAddPattern(config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
     this.client.chatAddPattern(config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
+    this.client.chatAddPattern(config.COMMANDSPAM_ALERT_REGEXP, 'commandSpamAlert');
 
     this.client.on('msg', (rank: string, username: string, message: string) => {
       this.emit('msg', rank, username, message);
@@ -160,6 +165,15 @@ class Bot extends EventEmitter {
       // shortly after connecting.
       this.chatDelay = config.SLOW_COOLDOWN;
       this.sendChat('&f', true);
+      console.warn('Sent messages too quickly!');
+    });
+
+    this.client.on('commandSpamAlert', () => {
+      // Sent commands too quickly.
+      // This can usually happen only
+      // shortly after connecting.
+      this.chatDelay = config.SLOW_COOLDOWN;
+      console.warn('Sent commands too quickly!');
     });
 
     this.client.on('connect', () => {

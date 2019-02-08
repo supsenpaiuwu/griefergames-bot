@@ -23,7 +23,7 @@ const ChatCodes = {
     STRIKETHROUGH: '§m',
     OBFUSCATED: '§k',
     RESET: '§r',
-    get: (c) => ChatCodes[c] || ''
+    get: (c) => ChatCodes[c] || '',
 };
 function jsonToCodedText(item) {
     let message = '';
@@ -37,7 +37,7 @@ function jsonToCodedText(item) {
             }
         }
         else {
-            const { text, color, extra, bold, italic, underlined, strikethrough, obfuscated } = item;
+            const { text, color, extra, bold, italic, underlined, strikethrough, obfuscated, } = item;
             if (color) {
                 message += ChatCodes.get(color.toUpperCase());
             }

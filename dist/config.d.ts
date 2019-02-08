@@ -6,5 +6,6 @@ export declare const config: {
     MSG_REGEXP: RegExp;
     CHATMODE_ALERT_REGEXP: RegExp;
     SLOWCHAT_ALERT_REGEXP: RegExp;
+    COMMANDSPAM_ALERT_REGEXP: RegExp;
     PAY_REGEXP: RegExp;
 };

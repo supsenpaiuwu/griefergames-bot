@@ -78,6 +78,9 @@ class Bot extends events_1.EventEmitter {
     sendMsg(re, text, sendNext) {
         this.send(`/msg ${re} ${text}`, sendNext);
     }
+    pay(re, amount) {
+        this.sendCommand(`pay ${re} ${amount}`);
+    }
     navigateTo(position) {
         return this.client.navigate.promise.to(position);
     }
@@ -112,6 +115,7 @@ class Bot extends events_1.EventEmitter {
         this.client.chatAddPattern(config_1.config.MSG_REGEXP, 'msg');
         this.client.chatAddPattern(config_1.config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
         this.client.chatAddPattern(config_1.config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
+        this.client.chatAddPattern(config_1.config.COMMANDSPAM_ALERT_REGEXP, 'commandSpamAlert');
         this.client.on('msg', (rank, username, message) => {
             this.emit('msg', rank, username, message);
         });
@@ -133,6 +137,11 @@ class Bot extends events_1.EventEmitter {
         this.client.on('slowChatAlert', () => {
             this.chatDelay = config_1.config.SLOW_COOLDOWN;
             this.sendChat('&f', true);
+            console.warn('Sent messages too quickly!');
+        });
+        this.client.on('commandSpamAlert', () => {
+            this.chatDelay = config_1.config.SLOW_COOLDOWN;
+            console.warn('Sent commands too quickly!');
         });
         this.client.on('connect', () => {
             this.client.once('spawn', () => {
