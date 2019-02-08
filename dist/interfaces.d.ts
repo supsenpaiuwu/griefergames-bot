@@ -20,7 +20,7 @@ export interface Position {
 }
 export interface ConnectorOptions {
     name: string;
-    start: number[];
+    start: number;
     front: number[];
     portal: number[];
 }
