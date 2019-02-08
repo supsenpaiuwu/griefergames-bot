@@ -37,7 +37,7 @@ const ChatCodes = {
   OBFUSCATED: '§k',
   RESET: '§r',
 
-  get: (c: string): string => ChatCodes[c] || ''
+  get: (c: string): string => ChatCodes[c] || '',
 };
 
 // Turns a JSON chat into a Minecraft code string.
@@ -69,7 +69,7 @@ function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
         italic,
         underlined,
         strikethrough,
-        obfuscated
+        obfuscated,
       } = item;
 
       if (color) {
@@ -120,5 +120,5 @@ function stripCodes(text: string): string {
 export {
   jsonToText,
   jsonToCodedText,
-  stripCodes
+  stripCodes,
 };
