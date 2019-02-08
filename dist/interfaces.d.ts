@@ -4,12 +4,6 @@ export interface Options {
     cacheSessions?: boolean;
     logMessages?: boolean;
 }
-export interface Proxy {
-    host: string;
-    port: number;
-    username?: string;
-    password?: string;
-}
 export interface Session {
     accessToken: string;
     clientToken: string;

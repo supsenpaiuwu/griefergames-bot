@@ -84,4 +84,5 @@ If you're stuck, don't hesitate to open a new issue directly on [GitHub](https:/
 
 ## Roadmap
 
+* Native proxy support
 * Implement a more reliable "CityBuild" connection method (sending pre-recorded packets directly)

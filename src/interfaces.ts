@@ -6,12 +6,12 @@ export interface Options {
   // proxy?: Proxy
 }
 
-export interface Proxy {
-  host: string;
-  port: number;
-  username?: string;
-  password?: string;
-}
+// export interface Proxy {
+//   host: string;
+//   port: number;
+//   username?: string;
+//   password?: string;
+// }
 
 export interface Session {
   accessToken: string;
@@ -22,12 +22,6 @@ export interface Session {
     [key: string]: any;
   };
 }
-
-// export interface PathPacket {
-//   data: any;
-//   delta: number;
-//   name: string;
-// }
 
 export interface Position {
   x: number;
