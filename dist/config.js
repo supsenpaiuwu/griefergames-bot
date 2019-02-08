@@ -9,5 +9,5 @@ exports.config = {
     MSG_REGEXP: new RegExp(`^\\[(${RANKS}) \\| ([A-Za-z0-9_]{1,16}) -> mir\\] (.+)$`),
     CHATMODE_ALERT_REGEXP: new RegExp(`^Der Chat wurde von (${RANKS}) \\| ([A-Za-z0-9_]{1,16}) (.+)\\.$`),
     SLOWCHAT_ALERT_REGEXP: /^Du kannst nur jede 3 Sekunden schreiben.$/,
-    PAY_REGEXP: new RegExp(`^[&\\w]{2,}(${RANKS}) \\| ([A-Za-z0-9_]{1,16}) &ahat dir \\$(\\S+) gegeben\\.$`),
+    PAY_REGEXP: new RegExp(`^[§0-9a-fA-Fk-oK-OrR]{2,}(${RANKS}) \\| ([A-Za-z0-9_]{1,16}) §ahat dir \\$(\\S+) gegeben\\.$`),
 };

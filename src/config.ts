@@ -11,6 +11,6 @@ export const config = {
 
   // Coded expressions
   // These only match if tested against coded messages.
-  // &f, &l, &r, etc.
-  PAY_REGEXP: new RegExp(`^[&\\w]{2,}(${RANKS}) \\| ([A-Za-z0-9_]{1,16}) &ahat dir \\$(\\S+) gegeben\\.$`),
+  // §f, §l, §r, etc.
+  PAY_REGEXP: new RegExp(`^[§0-9a-fA-Fk-oK-OrR]{2,}(${RANKS}) \\| ([A-Za-z0-9_]{1,16}) §ahat dir \\$(\\S+) gegeben\\.$`),
 };

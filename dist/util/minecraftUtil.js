@@ -1,28 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ChatCodes = {
-    BLACK: '&0',
-    DARK_BLUE: '&1',
-    DARK_GREEN: '&2',
-    DARK_AQUA: '&3',
-    DARK_RED: '&4',
-    DARK_PURPLE: '&5',
-    GOLD: '&6',
-    GRAY: '&7',
-    DARK_GRAY: '&8',
-    BLUE: '&9',
-    GREEN: '&a',
-    AQUA: '&b',
-    RED: '&c',
-    LIGHT_PURPLE: '&d',
-    YELLOW: '&e',
-    WHITE: '&f',
-    BOLD: '&l',
-    ITALIC: '&o',
-    UNDERLINE: '&n',
-    STRIKETHROUGH: '&m',
-    OBFUSCATED: '&k',
-    RESET: '&r',
+    BLACK: '§0',
+    DARK_BLUE: '§1',
+    DARK_GREEN: '§2',
+    DARK_AQUA: '§3',
+    DARK_RED: '§4',
+    DARK_PURPLE: '§5',
+    GOLD: '§6',
+    GRAY: '§7',
+    DARK_GRAY: '§8',
+    BLUE: '§9',
+    GREEN: '§a',
+    AQUA: '§b',
+    RED: '§c',
+    LIGHT_PURPLE: '§d',
+    YELLOW: '§e',
+    WHITE: '§f',
+    BOLD: '§l',
+    ITALIC: '§o',
+    UNDERLINE: '§n',
+    STRIKETHROUGH: '§m',
+    OBFUSCATED: '§k',
+    RESET: '§r',
     get: (c) => ChatCodes[c] || ''
 };
 function jsonToCodedText(item) {
@@ -62,7 +62,6 @@ function jsonToCodedText(item) {
             }
         }
     }
-    message = message.replace(/§/g, '&');
     return message;
 }
 exports.jsonToCodedText = jsonToCodedText;
@@ -71,6 +70,6 @@ function jsonToText(item) {
 }
 exports.jsonToText = jsonToText;
 function stripCodes(text) {
-    return text.replace(/&[A-F0-9K-OR]/ig, '');
+    return text.replace(/\u00A7[0-9A-FK-OR]/ig, '');
 }
 exports.stripCodes = stripCodes;

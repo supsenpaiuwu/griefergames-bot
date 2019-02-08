@@ -13,34 +13,34 @@ interface JsonChat {
 }
 
 const ChatCodes = {
-  BLACK: '&0',
-  DARK_BLUE: '&1',
-  DARK_GREEN: '&2',
-  DARK_AQUA: '&3',
-  DARK_RED: '&4',
-  DARK_PURPLE: '&5',
-  GOLD: '&6',
-  GRAY: '&7',
-  DARK_GRAY: '&8',
-  BLUE: '&9',
-  GREEN: '&a',
-  AQUA: '&b',
-  RED: '&c',
-  LIGHT_PURPLE: '&d',
-  YELLOW: '&e',
-  WHITE: '&f',
+  BLACK: '§0',
+  DARK_BLUE: '§1',
+  DARK_GREEN: '§2',
+  DARK_AQUA: '§3',
+  DARK_RED: '§4',
+  DARK_PURPLE: '§5',
+  GOLD: '§6',
+  GRAY: '§7',
+  DARK_GRAY: '§8',
+  BLUE: '§9',
+  GREEN: '§a',
+  AQUA: '§b',
+  RED: '§c',
+  LIGHT_PURPLE: '§d',
+  YELLOW: '§e',
+  WHITE: '§f',
 
-  BOLD: '&l',
-  ITALIC: '&o',
-  UNDERLINE: '&n',
-  STRIKETHROUGH: '&m',
-  OBFUSCATED: '&k',
-  RESET: '&r',
+  BOLD: '§l',
+  ITALIC: '§o',
+  UNDERLINE: '§n',
+  STRIKETHROUGH: '§m',
+  OBFUSCATED: '§k',
+  RESET: '§r',
 
   get: (c: string): string => ChatCodes[c] || ''
 };
 
-// Turns a JSON chat into a Minecraft color code string.
+// Turns a JSON chat into a Minecraft code string.
 // Multi-type for recursion.
 function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
   let message = '';
@@ -104,20 +104,17 @@ function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
     }
   }
 
-  // Servers, again, sometimes send messages
-  // that don't follow the specs.
-  message = message.replace(/§/g, '&');
   return message;
 }
 
-// Turns a JSON chat into a string.
+// Turns a JSON chat into a non-coded string.
 function jsonToText(item: JsonChat | JsonChat[]): string {
   return stripCodes(jsonToCodedText(item));
 }
 
-// Strips a color-coded string of its colors.
+// Strips a coded string of its codes.
 function stripCodes(text: string): string {
-  return text.replace(/&[A-F0-9K-OR]/ig, '');
+  return text.replace(/\u00A7[0-9A-FK-OR]/ig, '');
 }
 
 export {
