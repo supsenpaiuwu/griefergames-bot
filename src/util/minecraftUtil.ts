@@ -41,61 +41,66 @@ const ChatCodes = {
 };
 
 // Turns a JSON chat into a Minecraft color code string.
-function jsonToCodedText(item: JsonChat | JsonChat[]): string {
+// Multi-type for recursion.
+function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
   let message = '';
 
   // Servers sometimes send messages that
   // don't follow the specs.
+  // As far as I know, vanilla messages (e.g. achievements)
+  // can also be strings.
   if (typeof item === 'string') {
     return item;
   }
 
-  if (Array.isArray(item)) {
-    // We're looking at an array of 'extra' items.
-    for (const element of item) {
-      message += jsonToCodedText(element);
-    }
-  } else {
-    // We're looking at a specific 'extra' item.
-    const {
-      text,
-      color,
-      extra,
-      bold,
-      italic,
-      underlined,
-      strikethrough,
-      obfuscated
-    } = item;
+  if (typeof item === 'object') {
+    if (Array.isArray(item)) {
+      // We're looking at an array of 'extra' items.
+      for (const element of item) {
+        message += jsonToCodedText(element);
+      }
+    } else {
+      // We're looking at a specific 'extra' item.
+      const {
+        text,
+        color,
+        extra,
+        bold,
+        italic,
+        underlined,
+        strikethrough,
+        obfuscated
+      } = item;
 
-    if (color) {
-      message += ChatCodes.get(color.toUpperCase());
-    }
+      if (color) {
+        message += ChatCodes.get(color.toUpperCase());
+      }
 
-    if (bold) {
-      message += ChatCodes['BOLD'];
-    }
+      if (bold) {
+        message += ChatCodes['BOLD'];
+      }
 
-    if (italic) {
-      message += ChatCodes['ITALIC'];
-    }
+      if (italic) {
+        message += ChatCodes['ITALIC'];
+      }
 
-    if (underlined) {
-      message += ChatCodes['UNDERLINED'];
-    }
+      if (underlined) {
+        message += ChatCodes['UNDERLINED'];
+      }
 
-    if (strikethrough) {
-      message += ChatCodes['STRIKETHROUGH'];
-    }
+      if (strikethrough) {
+        message += ChatCodes['STRIKETHROUGH'];
+      }
 
-    if (obfuscated) {
-      message += ChatCodes['OBFUSCATED'];
-    }
+      if (obfuscated) {
+        message += ChatCodes['OBFUSCATED'];
+      }
 
-    message += text;
+      message += text;
 
-    if (extra) {
-      message += jsonToCodedText(extra);
+      if (extra) {
+        message += jsonToCodedText(extra);
+      }
     }
   }
 

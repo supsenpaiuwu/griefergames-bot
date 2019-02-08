@@ -133,7 +133,6 @@ class Bot extends events_1.EventEmitter {
         this.client.on('slowChatAlert', () => {
             this.chatDelay = config_1.config.SLOW_COOLDOWN;
             this.sendChat('&f', true);
-            this.emit('slowChatAlert');
         });
         this.client.on('connect', () => {
             this.client.once('spawn', () => {

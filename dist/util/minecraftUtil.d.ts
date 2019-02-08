@@ -9,7 +9,7 @@ interface JsonChat {
     extra?: JsonChat[];
     [key: string]: any;
 }
-declare function jsonToCodedText(item: JsonChat | JsonChat[]): string;
+declare function jsonToCodedText(item: JsonChat | JsonChat[] | string): string;
 declare function jsonToText(item: JsonChat | JsonChat[]): string;
 declare function stripCodes(text: string): string;
 export { jsonToText, jsonToCodedText, stripCodes };

@@ -30,34 +30,36 @@ function jsonToCodedText(item) {
     if (typeof item === 'string') {
         return item;
     }
-    if (Array.isArray(item)) {
-        for (const element of item) {
-            message += jsonToCodedText(element);
+    if (typeof item === 'object') {
+        if (Array.isArray(item)) {
+            for (const element of item) {
+                message += jsonToCodedText(element);
+            }
         }
-    }
-    else {
-        const { text, color, extra, bold, italic, underlined, strikethrough, obfuscated } = item;
-        if (color) {
-            message += ChatCodes.get(color.toUpperCase());
-        }
-        if (bold) {
-            message += ChatCodes['BOLD'];
-        }
-        if (italic) {
-            message += ChatCodes['ITALIC'];
-        }
-        if (underlined) {
-            message += ChatCodes['UNDERLINED'];
-        }
-        if (strikethrough) {
-            message += ChatCodes['STRIKETHROUGH'];
-        }
-        if (obfuscated) {
-            message += ChatCodes['OBFUSCATED'];
-        }
-        message += text;
-        if (extra) {
-            message += jsonToCodedText(extra);
+        else {
+            const { text, color, extra, bold, italic, underlined, strikethrough, obfuscated } = item;
+            if (color) {
+                message += ChatCodes.get(color.toUpperCase());
+            }
+            if (bold) {
+                message += ChatCodes['BOLD'];
+            }
+            if (italic) {
+                message += ChatCodes['ITALIC'];
+            }
+            if (underlined) {
+                message += ChatCodes['UNDERLINED'];
+            }
+            if (strikethrough) {
+                message += ChatCodes['STRIKETHROUGH'];
+            }
+            if (obfuscated) {
+                message += ChatCodes['OBFUSCATED'];
+            }
+            message += text;
+            if (extra) {
+                message += jsonToCodedText(extra);
+            }
         }
     }
     message = message.replace(/§/g, '&');

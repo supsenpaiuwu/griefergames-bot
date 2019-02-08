@@ -155,10 +155,11 @@ class Bot extends EventEmitter {
     });
 
     this.client.on('slowChatAlert', () => {
+      // Sent messages too quickly.
+      // This can usually happen only
+      // shortly after connecting.
       this.chatDelay = config.SLOW_COOLDOWN;
       this.sendChat('&f', true);
-
-      this.emit('slowChatAlert');
     });
 
     this.client.on('connect', () => {
