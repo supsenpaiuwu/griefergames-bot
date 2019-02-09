@@ -16,7 +16,7 @@ declare class Bot extends EventEmitter {
     sendChat(text: string, sendNext?: boolean): void;
     sendCommand(command: string, sendNext?: boolean): void;
     sendMsg(re: string, text: string, sendNext?: boolean): void;
-    pay(re: string, amount: number): void;
+    pay(re: string, amount: number, sendNext?: boolean): void;
     navigateTo(position: any): Promise<void>;
     private loadConnectorOptions;
     private installPlugins;

@@ -90,8 +90,8 @@ class Bot extends EventEmitter {
     this.send(`/msg ${re} ${text}`, sendNext);
   }
 
-  public pay(re: string, amount: number): void {
-    this.sendCommand(`pay ${re} ${amount}`);
+  public pay(re: string, amount: number, sendNext?: boolean): void {
+    this.send(`/pay ${re} ${amount}`, sendNext);
   }
 
   public navigateTo(position): Promise<void> {
@@ -208,16 +208,16 @@ class Bot extends EventEmitter {
 
       // Convert JSON chat to a coded string...
       // Trim just to be safe with our RegExp.
-      const colorCodedText = jsonToCodedText(message.json).trim();
-      const text = stripCodes(colorCodedText);
+      const codedText = jsonToCodedText(message.json).trim();
+      const text = stripCodes(codedText);
 
-      const payMatches = colorCodedText.match(config.PAY_REGEXP);
+      const payMatches = codedText.match(config.PAY_REGEXP);
       if (payMatches) {
         // Received money.
         const rank = payMatches[1];
         const username = payMatches[2];
-        const amount = parseInt(payMatches[3].replace(/,/g, ''), 10);
-        this.emit('pay', rank, username, amount, text, colorCodedText);
+        const amount = parseFloat(payMatches[3].replace(/,/g, ''));
+        this.emit('pay', rank, username, amount, text, codedText);
       }
     });
   }

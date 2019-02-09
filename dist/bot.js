@@ -78,8 +78,8 @@ class Bot extends events_1.EventEmitter {
     sendMsg(re, text, sendNext) {
         this.send(`/msg ${re} ${text}`, sendNext);
     }
-    pay(re, amount) {
-        this.sendCommand(`pay ${re} ${amount}`);
+    pay(re, amount, sendNext) {
+        this.send(`/pay ${re} ${amount}`, sendNext);
     }
     navigateTo(position) {
         return this.client.navigate.promise.to(position);
@@ -163,14 +163,14 @@ class Bot extends events_1.EventEmitter {
             if (this.options.logMessages) {
                 console.log(message.toAnsi());
             }
-            const colorCodedText = minecraftUtil_1.jsonToCodedText(message.json).trim();
-            const text = minecraftUtil_1.stripCodes(colorCodedText);
-            const payMatches = colorCodedText.match(config_1.config.PAY_REGEXP);
+            const codedText = minecraftUtil_1.jsonToCodedText(message.json).trim();
+            const text = minecraftUtil_1.stripCodes(codedText);
+            const payMatches = codedText.match(config_1.config.PAY_REGEXP);
             if (payMatches) {
                 const rank = payMatches[1];
                 const username = payMatches[2];
-                const amount = parseInt(payMatches[3].replace(/,/g, ''), 10);
-                this.emit('pay', rank, username, amount, text, colorCodedText);
+                const amount = parseFloat(payMatches[3].replace(/,/g, ''));
+                this.emit('pay', rank, username, amount, text, codedText);
             }
         });
     }
