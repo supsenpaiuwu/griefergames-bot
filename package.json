@@ -1,5 +1,5 @@
 {
-  "name": "gg",
+  "name": "griefergames",
   "version": "1.0.0",
   "description": "Easily create bots optimized for GrieferGames.net",
   "main": "./dist/index.js",

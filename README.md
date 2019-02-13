@@ -1,4 +1,4 @@
-# gg
+# griefergames
 
 A high-level package made for easily creating **bots** optimized for the Minecraft network **GrieferGames.net**.
 
