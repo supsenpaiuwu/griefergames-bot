@@ -7,13 +7,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/derjp/gg#readme",
+  "homepage": "https://github.com/derjp/griefergames#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/derjp/gg.git"
+    "url": "https://github.com/derjp/griefergames.git"
   },
   "bugs": {
-    "url": "https://github.com/derjp/gg/issues"
+    "url": "https://github.com/derjp/griefergames/issues"
   },
   "keywords": [
     "bot",
