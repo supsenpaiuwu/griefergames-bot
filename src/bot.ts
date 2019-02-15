@@ -31,7 +31,6 @@ class Bot extends EventEmitter {
     }
   }
 
-  // Call this method to start the bot.
   public async init(): Promise<void> {
     if (this.client) {
       return;
