@@ -92,3 +92,4 @@ async function run(bot, options) {
     clearTimeout(timeout);
 }
 exports.connectorTask = run;
+//# sourceMappingURL=connector.js.map

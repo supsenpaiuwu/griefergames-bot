@@ -93,7 +93,7 @@ class Bot extends EventEmitter {
     this.send(`/pay ${re} ${amount}`, sendNext);
   }
 
-  public navigateTo(position): Promise<void> {
+  public navigateTo(position: any): Promise<void> {
     return this.client.navigate.promise.to(position);
   }
 
@@ -118,8 +118,8 @@ class Bot extends EventEmitter {
   }
 
   private registerEvents(): void {
-    const forward = (e) => {
-      this.client.on(e, (...d) => {
+    const forward = (e: any) => {
+      this.client.on(e, (...d: any[]) => {
         this.emit(e, ...d);
       });
     };
@@ -189,7 +189,7 @@ class Bot extends EventEmitter {
       this.emit('session', session);
     });
 
-    this.client.on('error', (e) => {
+    this.client.on('error', (e: any) => {
       const errorText: string = (e.message || '').toLowerCase();
 
       // Absorb deserialization and buffer errors.
@@ -200,7 +200,7 @@ class Bot extends EventEmitter {
       this.emit('error', e);
     });
 
-    this.client.on('message', (message) => {
+    this.client.on('message', (message: any) => {
       if (this.options.logMessages) {
         console.log(message.toAnsi());
       }
@@ -230,7 +230,7 @@ class Bot extends EventEmitter {
       return;
     }
 
-    const text = this.chatQueue.shift();
+    const text = this.chatQueue.shift() || '';
 
     // Determine cooldown until next message.
     if (text.startsWith('/')) {

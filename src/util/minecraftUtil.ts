@@ -12,7 +12,7 @@ interface JsonChat {
   // See: https://wiki.vg/Chat
 }
 
-const ChatCodes = {
+const ChatCodes: any = {
   BLACK: '§0',
   DARK_BLUE: '§1',
   DARK_GREEN: '§2',
@@ -85,7 +85,7 @@ function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
       }
 
       if (underlined) {
-        message += ChatCodes['UNDERLINED'];
+        message += ChatCodes['UNDERLINE'];
       }
 
       if (strikethrough) {

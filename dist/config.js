@@ -12,3 +12,4 @@ exports.config = {
     COMMANDSPAM_ALERT_REGEXP: /^Bitte unterlasse das Spammen von Commands!/,
     PAY_REGEXP: new RegExp(`^[§0-9a-fA-Fk-oK-OrR]{2,}(${RANKS}) \\| ([A-Za-z0-9_]{1,16}) §ahat dir \\$(\\S+) gegeben\\.$`),
 };
+//# sourceMappingURL=config.js.map

@@ -105,3 +105,4 @@ function save(session, email) {
         });
     });
 }
+//# sourceMappingURL=sessionHandler.js.map

@@ -181,7 +181,7 @@ class Bot extends events_1.EventEmitter {
         if (this.chatQueue.length === 0) {
             return;
         }
-        const text = this.chatQueue.shift();
+        const text = this.chatQueue.shift() || '';
         if (text.startsWith('/')) {
             if (this.currentChatMode === enums_1.ChatMode.NORMAL) {
                 this.chatDelay = config_1.config.NORMAL_COOLDOWN;
@@ -248,3 +248,4 @@ function createBot(options) {
     return bot;
 }
 exports.createBot = createBot;
+//# sourceMappingURL=bot.js.map

@@ -48,7 +48,7 @@ function jsonToCodedText(item) {
                 message += ChatCodes['ITALIC'];
             }
             if (underlined) {
-                message += ChatCodes['UNDERLINED'];
+                message += ChatCodes['UNDERLINE'];
             }
             if (strikethrough) {
                 message += ChatCodes['STRIKETHROUGH'];
@@ -73,3 +73,4 @@ function stripCodes(text) {
     return text.replace(/\u00A7[0-9A-FK-OR]/ig, '');
 }
 exports.stripCodes = stripCodes;
+//# sourceMappingURL=minecraftUtil.js.map
