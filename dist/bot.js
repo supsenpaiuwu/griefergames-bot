@@ -70,16 +70,16 @@ class Bot extends events_1.EventEmitter {
         }
     }
     sendChat(text, sendNext) {
-        this.send(text, sendNext);
+        return this.send(text, sendNext);
     }
     sendCommand(command, sendNext) {
-        this.send(`/${command}`, sendNext);
+        return this.send(`/${command}`, sendNext);
     }
     sendMsg(re, text, sendNext) {
-        this.send(`/msg ${re} ${text}`, sendNext);
+        return this.send(`/msg ${re} ${text}`, sendNext);
     }
     pay(re, amount, sendNext) {
-        this.send(`/pay ${re} ${amount}`, sendNext);
+        return this.send(`/pay ${re} ${amount}`, sendNext);
     }
     navigateTo(position) {
         return this.client.navigate.promise.to(position);
@@ -181,7 +181,7 @@ class Bot extends events_1.EventEmitter {
         if (this.chatQueue.length === 0) {
             return;
         }
-        const text = this.chatQueue.shift() || '';
+        const [text, resolve] = this.chatQueue.shift();
         if (text.startsWith('/')) {
             if (this.currentChatMode === enums_1.ChatMode.NORMAL) {
                 this.chatDelay = config_1.config.NORMAL_COOLDOWN;
@@ -195,20 +195,19 @@ class Bot extends events_1.EventEmitter {
         }
         this.client.chat(text);
         this.messageLastSentTime = Date.now();
+        resolve();
         if (this.chatQueue.length > 0) {
             setTimeout(() => {
                 this.processChatQueue();
             }, this.chatDelay);
         }
     }
-    send(text, sendNext) {
+    async send(text, sendNext) {
         if (this.chatQueue.length > 0) {
             if (sendNext) {
-                this.chatQueue.unshift(text);
-                return;
+                return this.sendNext(text);
             }
-            this.chatQueue.push(text);
-            return;
+            return this.addToQueue(text);
         }
         const sinceLast = this.getTimeSinceLastMessage();
         if (sinceLast >= this.chatDelay) {
@@ -220,7 +219,17 @@ class Bot extends events_1.EventEmitter {
         setTimeout(() => {
             this.processChatQueue();
         }, untilNext);
-        this.chatQueue.push(text);
+        return this.addToQueue(text);
+    }
+    addToQueue(text) {
+        return new Promise(resolve => {
+            this.chatQueue.push([text, resolve]);
+        });
+    }
+    sendNext(text) {
+        return new Promise(resolve => {
+            this.chatQueue = [[text, resolve], ...this.chatQueue];
+        });
     }
 }
 exports.Bot = Bot;

@@ -13,10 +13,10 @@ declare class Bot extends EventEmitter {
     constructor(options: Options);
     init(): Promise<void>;
     connectCityBuild(destination: string): Promise<void>;
-    sendChat(text: string, sendNext?: boolean): void;
-    sendCommand(command: string, sendNext?: boolean): void;
-    sendMsg(re: string, text: string, sendNext?: boolean): void;
-    pay(re: string, amount: number, sendNext?: boolean): void;
+    sendChat(text: string, sendNext?: boolean): Promise<void>;
+    sendCommand(command: string, sendNext?: boolean): Promise<void>;
+    sendMsg(re: string, text: string, sendNext?: boolean): Promise<void>;
+    pay(re: string, amount: number, sendNext?: boolean): Promise<void>;
     navigateTo(position: any): Promise<void>;
     private loadConnectorOptions;
     private installPlugins;
@@ -24,6 +24,8 @@ declare class Bot extends EventEmitter {
     private getTimeSinceLastMessage;
     private processChatQueue;
     private send;
+    private addToQueue;
+    private sendNext;
 }
 declare function createBot(options: Options): Bot;
 export { createBot, Bot, };

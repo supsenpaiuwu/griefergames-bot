@@ -16,7 +16,7 @@ class Bot extends EventEmitter {
   private options: Options;
   private username: string;
   private password: string;
-  private chatQueue: string[] = [];
+  private chatQueue: any[] = [];
   private currentChatMode = ChatMode.NORMAL;
   private chatDelay = config.NORMAL_COOLDOWN;
   private messageLastSentTime: number = 0;
@@ -77,20 +77,20 @@ class Bot extends EventEmitter {
     }
   }
 
-  public sendChat(text: string, sendNext?: boolean): void {
-    this.send(text, sendNext);
+  public sendChat(text: string, sendNext?: boolean): Promise<void> {
+    return this.send(text, sendNext);
   }
 
-  public sendCommand(command: string, sendNext?: boolean): void {
-    this.send(`/${command}`, sendNext);
+  public sendCommand(command: string, sendNext?: boolean): Promise<void> {
+    return this.send(`/${command}`, sendNext);
   }
 
-  public sendMsg(re: string, text: string, sendNext?: boolean): void {
-    this.send(`/msg ${re} ${text}`, sendNext);
+  public sendMsg(re: string, text: string, sendNext?: boolean): Promise<void> {
+    return this.send(`/msg ${re} ${text}`, sendNext);
   }
 
-  public pay(re: string, amount: number, sendNext?: boolean): void {
-    this.send(`/pay ${re} ${amount}`, sendNext);
+  public pay(re: string, amount: number, sendNext?: boolean): Promise<void> {
+    return this.send(`/pay ${re} ${amount}`, sendNext);
   }
 
   public navigateTo(position: any): Promise<void> {
@@ -230,7 +230,7 @@ class Bot extends EventEmitter {
       return;
     }
 
-    const text = this.chatQueue.shift() || '';
+    const [text, resolve] = this.chatQueue.shift();
 
     // Determine cooldown until next message.
     if (text.startsWith('/')) {
@@ -246,6 +246,7 @@ class Bot extends EventEmitter {
 
     this.client.chat(text);
     this.messageLastSentTime = Date.now();
+    resolve();
 
     if (this.chatQueue.length > 0) {
       setTimeout(() => {
@@ -254,15 +255,13 @@ class Bot extends EventEmitter {
     }
   }
 
-  private send(text: string, sendNext?: boolean): void {
+  private async send(text: string, sendNext?: boolean): Promise<void> {
     if (this.chatQueue.length > 0) {
       if (sendNext) {
-        this.chatQueue.unshift(text);
-        return;
+        return this.sendNext(text);
       }
 
-      this.chatQueue.push(text);
-      return;
+      return this.addToQueue(text);
     }
 
     // From here on it only gets executed if the queue is empty.
@@ -272,7 +271,7 @@ class Bot extends EventEmitter {
     if (sinceLast >= this.chatDelay) {
       this.client.chat(text);
       this.messageLastSentTime = Date.now();
-      return;
+      return; // Resolves promise instantly.
     }
 
     const untilNext = this.chatDelay - sinceLast;
@@ -283,7 +282,20 @@ class Bot extends EventEmitter {
     }, untilNext);
 
     // Finally, add the message to the queue.
-    this.chatQueue.push(text);
+    return this.addToQueue(text);
+  }
+
+  private addToQueue(text: string): Promise<void> {
+    return new Promise(resolve => {
+      this.chatQueue.push([text, resolve]);
+    });
+  }
+
+  private sendNext(text: string): Promise<void> {
+    return new Promise(resolve => {
+      // Place at the start of the array.
+      this.chatQueue = [[text, resolve], ...this.chatQueue];
+    });
   }
 }
 
