@@ -3,6 +3,7 @@ export interface Options {
   password: string;
   cacheSessions?: boolean;
   logMessages?: boolean;
+  additionalChatDelay?: number;
   // proxy?: Proxy
 }
 

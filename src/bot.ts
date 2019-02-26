@@ -232,6 +232,10 @@ class Bot extends EventEmitter {
 
     const [text, resolve] = this.chatQueue.shift();
 
+    this.client.chat(text);
+    this.messageLastSentTime = Date.now();
+    resolve();
+
     // Determine cooldown until next message.
     if (text.startsWith('/')) {
       if (this.currentChatMode === ChatMode.NORMAL) {
@@ -241,12 +245,19 @@ class Bot extends EventEmitter {
       }
     } else {
       // Wait longer when sending regular chat messages.
-      this.chatDelay = config.SLOW_COOLDOWN + 1000;
+      if (this.currentChatMode === ChatMode.NORMAL) {
+        this.chatDelay = config.NORMAL_COOLDOWN + 1000;
+      } else {
+        this.chatDelay = config.SLOW_COOLDOWN + 1000;
+      }
     }
 
-    this.client.chat(text);
-    this.messageLastSentTime = Date.now();
-    resolve();
+    // User wants to wait longer.
+    // Sometimes this is needed, to make a quick fix
+    // in case the bot is being kicked for "spamming" in chat.
+    if (this.options.additionalChatDelay) {
+      this.chatDelay += this.options.additionalChatDelay;
+    }
 
     if (this.chatQueue.length > 0) {
       setTimeout(() => {

@@ -182,6 +182,9 @@ class Bot extends events_1.EventEmitter {
             return;
         }
         const [text, resolve] = this.chatQueue.shift();
+        this.client.chat(text);
+        this.messageLastSentTime = Date.now();
+        resolve();
         if (text.startsWith('/')) {
             if (this.currentChatMode === enums_1.ChatMode.NORMAL) {
                 this.chatDelay = config_1.config.NORMAL_COOLDOWN;
@@ -191,11 +194,16 @@ class Bot extends events_1.EventEmitter {
             }
         }
         else {
-            this.chatDelay = config_1.config.SLOW_COOLDOWN + 1000;
+            if (this.currentChatMode === enums_1.ChatMode.NORMAL) {
+                this.chatDelay = config_1.config.NORMAL_COOLDOWN + 1000;
+            }
+            else {
+                this.chatDelay = config_1.config.SLOW_COOLDOWN + 1000;
+            }
         }
-        this.client.chat(text);
-        this.messageLastSentTime = Date.now();
-        resolve();
+        if (this.options.additionalChatDelay) {
+            this.chatDelay += this.options.additionalChatDelay;
+        }
         if (this.chatQueue.length > 0) {
             setTimeout(() => {
                 this.processChatQueue();
