@@ -229,6 +229,13 @@ class Bot extends EventEmitter {
         this.emit('pay', rank, username, amount, text, codedText);
       }
     });
+
+    this.client._client.on('packet', (data: any, metadata: any) => {
+      // Emit scoreboard balance updates.
+      if (metadata.name === 'scoreboard_team' && data.name === 'Kontostandcheck') {
+        this.emit('scoreboardBalance', data.prefix);
+      }
+    });
   }
 
   private getTimeSinceLastMessage(): number {

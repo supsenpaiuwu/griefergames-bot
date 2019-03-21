@@ -180,6 +180,11 @@ class Bot extends events_1.EventEmitter {
                 this.emit('pay', rank, username, amount, text, codedText);
             }
         });
+        this.client._client.on('packet', (data, metadata) => {
+            if (metadata.name === 'scoreboard_team' && data.name === 'Kontostandcheck') {
+                this.emit('scoreboardBalance', data.prefix);
+            }
+        });
     }
     getTimeSinceLastMessage() {
         return Date.now() - this.messageLastSentTime;
