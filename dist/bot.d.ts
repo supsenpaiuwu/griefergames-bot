@@ -18,6 +18,7 @@ declare class Bot extends EventEmitter {
     sendMsg(re: string, text: string, sendNext?: boolean): Promise<void>;
     pay(re: string, amount: number, sendNext?: boolean): Promise<void>;
     navigateTo(position: any): Promise<void>;
+    end(reason?: string): void;
     private loadConnectorOptions;
     private installPlugins;
     private registerEvents;
@@ -26,6 +27,7 @@ declare class Bot extends EventEmitter {
     private send;
     private addToQueue;
     private sendNext;
+    private clean;
 }
 declare function createBot(options: Options): Bot;
 export { createBot, Bot, };

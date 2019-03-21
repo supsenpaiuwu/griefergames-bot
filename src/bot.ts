@@ -16,10 +16,10 @@ class Bot extends EventEmitter {
   private options: Options;
   private username: string;
   private password: string;
-  private chatQueue: any[] = [];
+  private chatQueue = [];
   private currentChatMode = ChatMode.NORMAL;
   private chatDelay = config.NORMAL_COOLDOWN;
-  private messageLastSentTime: number = 0;
+  private messageLastSentTime = 0;
 
   constructor(options: Options) {
     super();
@@ -31,15 +31,17 @@ class Bot extends EventEmitter {
     }
   }
 
+  // Call this method to start the bot.
+  // It will also kill an existing bot if applicable.
   public async init(): Promise<void> {
     if (this.client) {
-      return;
+      this.clean();
     }
 
     const botOptions: any = {
       host: 'bungee10.griefergames.net',
       port: null,
-      version: 1.8,
+      version: 1.8, // TODO: Test if 1.12 is more stable.
       checkTimeoutInterval: 30000,
     };
 
@@ -95,6 +97,14 @@ class Bot extends EventEmitter {
 
   public navigateTo(position: any): Promise<void> {
     return this.client.navigate.promise.to(position);
+  }
+
+  public end(reason?: string): void {
+    if (this.client) {
+      this.client.quit(reason);
+      this.client.removeAllListeners();
+    }
+    this.removeAllListeners();
   }
 
   private async loadConnectorOptions(dest: string): Promise<ConnectorOptions> {
@@ -307,6 +317,14 @@ class Bot extends EventEmitter {
       // Place at the start of the array.
       this.chatQueue = [[text, resolve], ...this.chatQueue];
     });
+  }
+
+  private clean(reason?: string): void {
+    if (this.client) {
+      this.client.quit(reason);
+      this.client.removeAllListeners();
+      this.client = null;
+    }
   }
 }
 

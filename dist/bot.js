@@ -29,7 +29,7 @@ class Bot extends events_1.EventEmitter {
     }
     async init() {
         if (this.client) {
-            return;
+            this.clean();
         }
         const botOptions = {
             host: 'bungee10.griefergames.net',
@@ -83,6 +83,13 @@ class Bot extends events_1.EventEmitter {
     }
     navigateTo(position) {
         return this.client.navigate.promise.to(position);
+    }
+    end(reason) {
+        if (this.client) {
+            this.client.quit(reason);
+            this.client.removeAllListeners();
+        }
+        this.removeAllListeners();
     }
     async loadConnectorOptions(dest) {
         const file = path_1.default.join(__dirname, `../paths/${dest.trim().toLowerCase()}.json`);
@@ -238,6 +245,13 @@ class Bot extends events_1.EventEmitter {
         return new Promise(resolve => {
             this.chatQueue = [[text, resolve], ...this.chatQueue];
         });
+    }
+    clean(reason) {
+        if (this.client) {
+            this.client.quit(reason);
+            this.client.removeAllListeners();
+            this.client = null;
+        }
     }
 }
 exports.Bot = Bot;
