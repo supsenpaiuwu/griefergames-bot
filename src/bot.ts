@@ -6,13 +6,14 @@ import { EventEmitter } from 'events';
 
 import { getValidSession } from './sessionHandler';
 import { Session, Options, ConnectorOptions } from './interfaces';
-import { ChatMode } from './enums';
+import { ChatMode, ConnectionStatus } from './enums';
 import { config } from './config';
 import { connectorTask } from './tasks/connector';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
 class Bot extends EventEmitter {
   public client: any;
+  public connectionStatus = ConnectionStatus.NOT_STARTED;
   private options: Options;
   private username: string;
   private password: string;
@@ -34,9 +35,9 @@ class Bot extends EventEmitter {
   // Call this method to start the bot.
   // It will also kill an existing bot if applicable.
   public async init(): Promise<void> {
-    if (this.client) {
-      this.clean();
-    }
+    this.setConnectionStatus(ConnectionStatus.LOGGING_IN);
+
+    this.clean();
 
     const botOptions: any = {
       host: 'bungee10.griefergames.net',
@@ -60,6 +61,14 @@ class Bot extends EventEmitter {
 
     this.registerEvents();
     this.installPlugins();
+  }
+
+  public isOnline(): boolean {
+    return this.client && this.connectionStatus === ConnectionStatus.LOGGED_IN;
+  }
+
+  public getStatus(): ConnectionStatus {
+    return this.connectionStatus;
   }
 
   public async connectCityBuild(destination: string): Promise<void> {
@@ -102,9 +111,15 @@ class Bot extends EventEmitter {
   public end(reason?: string): void {
     if (this.client) {
       this.client.quit(reason);
-      this.client.removeAllListeners();
     }
-    this.removeAllListeners();
+  }
+
+  private setConnectionStatus(status: ConnectionStatus): void {
+    const old = this.connectionStatus;
+
+    this.connectionStatus = status;
+
+    this.emit('connectionStatus', status, old);
   }
 
   private async loadConnectorOptions(dest: string): Promise<ConnectorOptions> {
@@ -135,10 +150,40 @@ class Bot extends EventEmitter {
     };
 
     forward('spawn');
-    forward('login');
-    forward('kicked');
     forward('death');
-    forward('end');
+    
+    // Emitted when the client logs into the server.
+    // The bot has not actually entered the world yet,
+    // when login is called.
+    this.client.on('login', () => {
+      // Update connection status.
+      this.setConnectionStatus(ConnectionStatus.LOGGED_IN);
+
+      this.emit('login');
+    });
+
+    // Emitted when the client's connection to the server ends.
+    this.client.on('end', () => {
+      this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
+
+      this.emit('end');
+    });
+
+    // Emitted when the client is kicked.
+    this.client.on('kicked', (reason: string, loggedIn: boolean) => {
+      this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
+
+      let text;
+
+      try {
+        reason = JSON.parse(reason);
+        text = stripCodes(reason.toString());
+      } catch (e) {
+        text = stripCodes(reason);
+      }
+
+      this.emit('kicked', text, loggedIn);
+    });
 
     this.client.chatAddPattern(config.MSG_REGEXP, 'msg');
     this.client.chatAddPattern(config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
@@ -200,11 +245,17 @@ class Bot extends EventEmitter {
     });
 
     this.client.on('error', (e: any) => {
-      const errorText: string = (e.message || '').toLowerCase();
+      const errorText: string = (e.message || e || '').toLowerCase();
 
       // Absorb deserialization and buffer errors.
       if (errorText.includes('deserialization') || errorText.includes('buffer')) {
         return;
+      }
+
+      // This error not only occurs when credentials
+      // are wrong, but also when you have been rate-limited.
+      if (errorText.includes('invalid username or password')) {
+        this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
       }
 
       this.emit('error', e);
@@ -284,6 +335,12 @@ class Bot extends EventEmitter {
   }
 
   private async send(text: string, sendNext?: boolean): Promise<void> {
+    // Makes sure the bot is truthy and
+    // that its connectionStatus is logged in.
+    if (!this.isOnline()) {
+      throw new Error('Bot is not currently online.');
+    }
+    
     if (this.chatQueue.length > 0) {
       if (sendNext) {
         return this.sendNext(text);
