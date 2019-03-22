@@ -6,7 +6,7 @@ import { EventEmitter } from 'events';
 
 import { getValidSession } from './sessionHandler';
 import { Session, Options, ConnectorOptions } from './interfaces';
-import { ChatMode, ConnectionStatus } from './enums';
+import { ChatMode, ConnectionStatus, CityBuild } from './enums';
 import { config } from './config';
 import { connectorTask } from './tasks/connector';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
@@ -71,9 +71,7 @@ class Bot extends EventEmitter {
     return this.connectionStatus;
   }
 
-  public async connectCityBuild(destination: string): Promise<void> {
-    const dest = destination.trim().toLowerCase();
-
+  public async connectCityBuild(dest: CityBuild): Promise<void> {
     let connectorOptions: ConnectorOptions;
     try {
       connectorOptions = await this.loadConnectorOptions(dest);
@@ -122,7 +120,7 @@ class Bot extends EventEmitter {
     this.emit('connectionStatus', status, old);
   }
 
-  private async loadConnectorOptions(dest: string): Promise<ConnectorOptions> {
+  private async loadConnectorOptions(dest: CityBuild): Promise<ConnectorOptions> {
     const file = path.join(__dirname, `../paths/${dest.trim().toLowerCase()}.json`);
 
     let connectorOptions: ConnectorOptions;
