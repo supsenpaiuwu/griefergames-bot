@@ -15,8 +15,6 @@ class Bot extends EventEmitter {
   public client: any;
   public connectionStatus = ConnectionStatus.NOT_STARTED;
   private options: Options;
-  private username: string;
-  private password: string;
   private chatQueue = [];
   private currentChatMode = ChatMode.NORMAL;
   private chatDelay = config.NORMAL_COOLDOWN;
@@ -25,8 +23,6 @@ class Bot extends EventEmitter {
   constructor(options: Options) {
     super();
     this.options = options;
-    this.username = options.username;
-    this.password = options.password;
     if (options.cacheSessions) {
       console.log('Caching sessions.');
     }
@@ -48,13 +44,13 @@ class Bot extends EventEmitter {
 
     if (this.options.cacheSessions) {
       try {
-        botOptions.session = await getValidSession(this.username, this.password);
+        botOptions.session = await getValidSession(this.options.username, this.options.password);
       } catch (e) {
         throw e;
       }
     } else {
-      botOptions.username = this.username;
-      botOptions.password = this.password;
+      botOptions.username = this.options.username;
+      botOptions.password = this.options.password;
     }
 
     this.client = mineflayer.createBot(botOptions);
@@ -149,7 +145,7 @@ class Bot extends EventEmitter {
 
     forward('spawn');
     forward('death');
-    
+
     // Emitted when the client logs into the server.
     // The bot has not actually entered the world yet,
     // when login is called.
@@ -338,7 +334,7 @@ class Bot extends EventEmitter {
     if (!this.isOnline()) {
       throw new Error('Bot is not currently online.');
     }
-    
+
     if (this.chatQueue.length > 0) {
       if (sendNext) {
         return this.sendNext(text);
@@ -369,13 +365,13 @@ class Bot extends EventEmitter {
   }
 
   private addToQueue(text: string): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.chatQueue.push([text, resolve]);
     });
   }
 
   private sendNext(text: string): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // Place at the start of the array.
       this.chatQueue = [[text, resolve], ...this.chatQueue];
     });
