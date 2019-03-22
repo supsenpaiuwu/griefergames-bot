@@ -12,33 +12,31 @@ interface JsonChat {
   // See: https://wiki.vg/Chat
 }
 
-const ChatCodes: any = {
-  BLACK: '§0',
-  DARK_BLUE: '§1',
-  DARK_GREEN: '§2',
-  DARK_AQUA: '§3',
-  DARK_RED: '§4',
-  DARK_PURPLE: '§5',
-  GOLD: '§6',
-  GRAY: '§7',
-  DARK_GRAY: '§8',
-  BLUE: '§9',
-  GREEN: '§a',
-  AQUA: '§b',
-  RED: '§c',
-  LIGHT_PURPLE: '§d',
-  YELLOW: '§e',
-  WHITE: '§f',
+enum ChatCodes {
+  BLACK = '§0',
+  DARK_BLUE = '§1',
+  DARK_GREEN = '§2',
+  DARK_AQUA = '§3',
+  DARK_RED = '§4',
+  DARK_PURPLE = '§5',
+  GOLD = '§6',
+  GRAY = '§7',
+  DARK_GRAY = '§8',
+  BLUE = '§9',
+  GREEN = '§a',
+  AQUA = '§b',
+  RED = '§c',
+  LIGHT_PURPLE = '§d',
+  YELLOW = '§e',
+  WHITE = '§f',
 
-  BOLD: '§l',
-  ITALIC: '§o',
-  UNDERLINE: '§n',
-  STRIKETHROUGH: '§m',
-  OBFUSCATED: '§k',
-  RESET: '§r',
-
-  get: (c: string): string => ChatCodes[c] || '',
-};
+  OBFUSCATED = '§k',
+  BOLD = '§l',
+  STRIKETHROUGH = '§m',
+  UNDERLINE = '§n',
+  ITALIC = '§o',
+  RESET = '§r',
+}
 
 // Turns a JSON chat into a Minecraft code string.
 // Multi-type for recursion.
@@ -73,27 +71,27 @@ function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
       } = item;
 
       if (color) {
-        message += ChatCodes.get(color.toUpperCase());
+        message += ChatCodes[color.toUpperCase()] || '';
       }
 
       if (bold) {
-        message += ChatCodes['BOLD'];
+        message += ChatCodes.BOLD;
       }
 
       if (italic) {
-        message += ChatCodes['ITALIC'];
+        message += ChatCodes.ITALIC;
       }
 
       if (underlined) {
-        message += ChatCodes['UNDERLINE'];
+        message += ChatCodes.UNDERLINE;
       }
 
       if (strikethrough) {
-        message += ChatCodes['STRIKETHROUGH'];
+        message += ChatCodes.STRIKETHROUGH;
       }
 
       if (obfuscated) {
-        message += ChatCodes['OBFUSCATED'];
+        message += ChatCodes.OBFUSCATED;
       }
 
       message += text;
