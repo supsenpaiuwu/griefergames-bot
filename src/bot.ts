@@ -167,16 +167,7 @@ class Bot extends EventEmitter {
     this.client.on('kicked', (reason: string, loggedIn: boolean) => {
       this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
 
-      let text;
-
-      try {
-        reason = JSON.parse(reason);
-        text = stripCodes(reason.toString());
-      } catch (e) {
-        text = stripCodes(reason);
-      }
-
-      this.emit('kicked', text, loggedIn);
+      this.emit('kicked', reason, loggedIn);
     });
 
     this.client.chatAddPattern(config.MSG_REGEXP, 'msg');
