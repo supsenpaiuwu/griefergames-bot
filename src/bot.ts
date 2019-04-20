@@ -36,7 +36,7 @@ class Bot extends EventEmitter {
     this.clean();
 
     const botOptions: any = {
-      host: 'bungee10.griefergames.net',
+      host: 'bungee6.griefergames.net',
       port: null,
       version: 1.8, // TODO: Test if 1.12 is more stable.
       checkTimeoutInterval: 30000,
