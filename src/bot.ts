@@ -256,8 +256,12 @@ class Bot extends EventEmitter {
       const codedText = jsonToCodedText(message.json).trim();
       const text = stripCodes(codedText);
 
-      const payMatches = codedText.match(config.PAY_REGEXP);
-      if (payMatches) {
+      // Check for fake money
+      const fakeCheck = codedText.match(config.CODED_PAY_REGEXP);
+      // Get values
+      const payMatches = text.match(config.PAY_REGXP);
+      
+      if (fakeCheck && payMatches) {
         // Received money.
         const rank = payMatches[1];
         const username = payMatches[2];
