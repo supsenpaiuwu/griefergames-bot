@@ -1,5 +1,8 @@
 # griefergames
 
+> Complaints:
+> 0x13156E9@gmail.com
+
 A high-level package made for easily creating **bots** optimized for the Minecraft network **GrieferGames.net**.
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
