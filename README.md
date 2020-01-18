@@ -1,9 +1,10 @@
+<div align="center">
+
 # griefergames
 
-> Complaints:
-> 0x13156E9@gmail.com
+> A high-level package for easily creating **bots** for the Minecraft network **GrieferGames.net**.
 
-> A high-level package made for easily creating **bots** optimized for the Minecraft network **GrieferGames.net**.
+</div>
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
@@ -15,17 +16,18 @@ Find this module on [npm](https://www.npmjs.com/package/griefergames).
 
 ## Features
 
-* Promise support
-* Expressive API (TypeScript support)
+* Supports Promises/Async-Await
+* Expressive API (type definitions)
 * Easily connect on every "CityBuild" server using a single method
 * Optimized chat queue - adapts to chat mode and other factors
-* Automatic session caching and refreshing
+* Session caching and refreshing
 * Fake money filtering
-* Useful events - react on private messages, money transfers etc
+* Useful events - react to private messages, money transfers etc.
 * Make use of the complete feature set of Mineflayer - this package only adds functionality
-* Clean and focused
 
 ## Installation
+
+> This package is currently not hosted on npm. Consider cloning this repository and installing the package manually, instead.
 
 This is a [Node.js](https://nodejs.org/) module available through the [npm registry](https://www.npmjs.com/).
 
@@ -61,7 +63,7 @@ const bot = createBot({
 // We will ignore that for demonstration purposes.
 bot.init();
 
-bot.on('ready', function () {
+bot.on('ready', () => {
   // You should wait for the 'ready' event
   // for most actions.
   console.log('Bot is now ready for use!');
@@ -82,10 +84,6 @@ bot.on('ready', function () {
 ## Support
 
 You will probably have some questions at some point of using this package.
-Try to solve it by yourself first, by going through the code base (the TypeScript files give away most of the functionality of the package).
-If you're stuck, don't hesitate to open a new issue directly on [GitHub](https://github.com/derjp/gg/issues) or contact me on the [GrieferGames forums](https://griefergames.de/index.php?user/6076-derjp/)!
 
-## Roadmap
-
-* Native proxy support
-* Implement a more reliable "CityBuild" connection method (sending pre-recorded packets directly)
+The type definitions give away most of the functionality of the package. You can check these manually, or, if you are using an IDE with a code suggestion plugins, such as IntelliSense, it will also list all available methods for you.
+If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/derjp/gg/issues)!
