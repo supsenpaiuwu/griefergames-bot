@@ -2,7 +2,7 @@
 
 # griefergames
 
-> A high-level package for easily creating **bots** for the Minecraft network **GrieferGames.net**.
+A high-level package for easily creating **bots** for the Minecraft network **GrieferGames.net**.
 
 </div>
 
