@@ -85,5 +85,5 @@ bot.on('ready', () => {
 
 You will probably have some questions at some point of using this package.
 
-The type definitions give away most of the functionality of the package. You can check these manually, or, if you are using an IDE with a code suggestion plugins, such as IntelliSense, it will also list all available methods for you.
+The type definitions give away most of the functionality of the package. You can check these manually, or, if you are using an IDE with code suggestion functionality, such as IntelliSense, it will also list all available methods for you.
 If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/derjp/gg/issues)!
