@@ -1,4 +1,6 @@
 export const config = {
+  SERVER_IP: 'griefergames.net',
+  SERVER_PORT: 25565,
   NORMAL_COOLDOWN: 3050,
   SLOW_COOLDOWN: 4050,
   PORTAL_COOLDOWN: 12000,

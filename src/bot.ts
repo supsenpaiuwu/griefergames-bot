@@ -36,8 +36,8 @@ class Bot extends EventEmitter {
     this.clean();
 
     const botOptions: any = {
-      host: 'bungee6.griefergames.net',
-      port: null,
+      host: config.SERVER_IP,
+      port: config.SERVER_PORT,
       version: 1.8, // TODO: Test if 1.12 is more stable.
       checkTimeoutInterval: 30000,
     };
@@ -260,7 +260,7 @@ class Bot extends EventEmitter {
       const fakeCheck = codedText.match(config.CODED_PAY_REGEXP);
       // Get values
       const payMatches = text.match(config.PAY_REGXP);
-      
+
       if (fakeCheck && payMatches) {
         // Received money.
         const rank = payMatches[1];
@@ -360,13 +360,13 @@ class Bot extends EventEmitter {
   }
 
   private addToQueue(text: string): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.chatQueue.push([text, resolve]);
     });
   }
 
   private sendNext(text: string): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       // Place at the start of the array.
       this.chatQueue = [[text, resolve], ...this.chatQueue];
     });
@@ -407,7 +407,4 @@ function createBot(options: Options): Bot {
   return bot;
 }
 
-export {
-  createBot,
-  Bot,
-};
+export { createBot, Bot };
