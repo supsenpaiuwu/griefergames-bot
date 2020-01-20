@@ -10,20 +10,20 @@ Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
 Find this module on [npm](https://www.npmjs.com/package/griefergames).
 
-[Twitter](https://twitter.com/derjp_) | 
-[npm](https://www.npmjs.com/~derjp) | 
+[Twitter](https://twitter.com/derjp_) |
+[npm](https://www.npmjs.com/~derjp) |
 [Forums](https://griefergames.de/index.php?user/6076-derjp/)
 
 ## Features
 
-* Supports Promises/Async-Await
-* Expressive API (type definitions)
-* Easily connect on every "CityBuild" server using a single method
-* Optimized chat queue - adapts to chat mode and other factors
-* Session caching and refreshing
-* Fake money filtering
-* Useful events - react to private messages, money transfers etc.
-* Make use of the complete feature set of Mineflayer - this package only adds functionality
+- Supports Promises/Async-Await
+- Expressive API (type definitions)
+- Easily connect on every "CityBuild" server using a single method
+- Optimized chat queue - adapts to chat mode and other factors
+- Session caching and refreshing
+- Fake money filtering
+- Useful events - react to private messages, money transfers etc.
+- Make use of the complete feature set of Mineflayer - this package only adds functionality
 
 ## Installation
 
@@ -40,6 +40,7 @@ $ npm install griefergames
 ## Quick Start
 
 Importing the package:
+
 ```javascript
 const gg = require('griefergames');
 
@@ -51,12 +52,13 @@ import { createBot } from 'griefergames';
 ```
 
 Creating a bot:
+
 ```javascript
 const bot = createBot({
   username: 'email@example.com',
   password: 'password',
   cacheSessions: true,
-  logMessages: true
+  logMessages: true,
 });
 
 // This is async (returns a promise)
@@ -70,14 +72,15 @@ bot.on('ready', () => {
 
   // For example, now would be a good time
   // to connect on our chosen "CityBuild" server.
-  bot.connectCityBuild('cb2')
-  .then(() => {
-    console.log('Connected on CityBuild 2!');
-    // Do things on the server...
-  })
-  .catch(e => {
-    console.error(e);
-  });
+  bot
+    .connectCityBuild('cb2')
+    .then(() => {
+      console.log('Connected on CityBuild 2!');
+      // Do things on the server...
+    })
+    .catch(e => {
+      console.error(e);
+    });
 });
 ```
 
@@ -87,3 +90,7 @@ You will probably have some questions at some point of using this package.
 
 The type definitions give away most of the functionality of the package. You can check these manually, or, if you are using an IDE with code suggestion functionality, such as IntelliSense, it will also list all available methods for you.
 If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/derjp/gg/issues)!
+
+## License
+
+[MIT](https://github.com/derjp/griefergames/blob/master/LICENSE)

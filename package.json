@@ -22,7 +22,7 @@
     "griefergames"
   ],
   "author": "DerJP <0x13156e9@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "mineflayer": "^2.10.0",
     "mineflayer-navigate-promise": "^0.2.0",
