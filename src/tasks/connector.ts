@@ -12,13 +12,13 @@ import { config } from '../config';
 // Thank you!
 
 function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
 }
 
 function waitForSpawn(bot: Bot): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     bot.client.once('spawn', resolve);
   });
 }
@@ -45,21 +45,21 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   let startPos: any;
   let lookDirection: number[];
   switch (options.start) {
-    case 0: // NW
-      startPos = vec3(324, 117, 277);
+    case 0: // SW
+      startPos = vec3(323, 117, 281);
+      lookDirection = [CARDINAL_YAWS.SOUTH_WEST, 0];
+      break;
+    case 1: // NW
+      startPos = vec3(323, 117, 279);
       lookDirection = [CARDINAL_YAWS.NORTH_WEST, 0];
       break;
-    case 1: // NE
-      startPos = vec3(326, 117, 277);
+    case 2: // NE
+      startPos = vec3(327, 117, 279);
       lookDirection = [CARDINAL_YAWS.NORTH_EAST, 0];
       break;
-    case 2: // SE
-      startPos = vec3(326, 117, 283);
+    case 3: // SE
+      startPos = vec3(327, 117, 281);
       lookDirection = [CARDINAL_YAWS.SOUTH_EAST, 0];
-      break;
-    case 3: // SW
-      startPos = vec3(324, 117, 283);
-      lookDirection = [CARDINAL_YAWS.SOUTH_WEST, 0];
       break;
     default:
       throw new Error('Start position not provided! Check path file.');
