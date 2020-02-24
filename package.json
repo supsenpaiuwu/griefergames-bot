@@ -21,16 +21,16 @@
     "minecraft",
     "griefergames"
   ],
-  "author": "DerJP <0x13156e9@gmail.com>",
+  "author": "DerJP <dev@derjp.de>",
   "license": "MIT",
   "dependencies": {
-    "mineflayer": "^2.10.0",
+    "mineflayer": "^2.11.0",
     "mineflayer-navigate-promise": "^0.2.0",
     "mojang": "^2.2.2",
     "vec3": "^0.1.3"
   },
   "devDependencies": {
-    "@types/node": "^10.17.13",
-    "typescript": "^3.7.5"
+    "@types/node": "^10.17.16",
+    "typescript": "^3.8.2"
   }
 }
