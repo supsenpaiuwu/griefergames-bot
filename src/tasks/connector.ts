@@ -104,7 +104,7 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   bot.client.setControlState('sprint', true);
   bot.client.setControlState('forward', true);
   bot.client.setControlState('jump', true);
-  await delay(300);
+  await delay(1000);
 
   bot.client.clearControlStates();
 
