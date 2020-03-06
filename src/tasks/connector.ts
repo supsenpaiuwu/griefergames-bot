@@ -7,10 +7,6 @@ import { config } from '../config';
 // due to bad Mineflayer physics.
 // ¯\_(ツ)_/¯
 
-// PS: Don't copy this without giving credits -
-// this was a lot of work to optimize.
-// Thank you!
-
 function delay(ms: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
@@ -36,6 +32,8 @@ const CARDINAL_YAWS = {
   EAST: (3 * Math.PI) / 2,
   NORTH_EAST: (7 * Math.PI) / 4,
 };
+
+const WIGGLE_INTERVAL = 1000;
 
 async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   const timeout = setTimeout(() => {
@@ -106,10 +104,38 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   bot.client.setControlState('sprint', true);
   bot.client.setControlState('forward', true);
   bot.client.setControlState('jump', true);
-  await waitForSpawn(bot);
+  await delay(300);
 
   bot.client.clearControlStates();
+
+  const stopWiggle = wiggle(bot);
+
+  await waitForSpawn(bot);
+
+  stopWiggle();
   clearTimeout(timeout);
+}
+
+function wiggle(bot: Bot): () => void {
+  function moveLeft() {
+    bot.client.setControlState('left', true);
+  }
+
+  function moveRight() {
+    bot.client.setControlState('right', true);
+  }
+
+  let left = true;
+  const interval = setInterval(() => {
+    bot.client.clearControlStates();
+    left ? moveLeft() : moveRight();
+
+    left = !left;
+  }, WIGGLE_INTERVAL);
+
+  return () => {
+    clearInterval(interval);
+  };
 }
 
 export { run as connectorTask };
