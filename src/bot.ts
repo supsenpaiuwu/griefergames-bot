@@ -11,6 +11,10 @@ import { config } from './config';
 import { connectorTask } from './tasks/connector';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
+const defaultOptions = {
+  cacheSessions: true,
+};
+
 class Bot extends EventEmitter {
   public client: any;
   public connectionStatus = ConnectionStatus.NOT_STARTED;
@@ -22,10 +26,7 @@ class Bot extends EventEmitter {
 
   constructor(options: Options) {
     super();
-    this.options = options;
-    if (options.cacheSessions) {
-      console.log('Caching sessions.');
-    }
+    this.options = { ...defaultOptions, ...options };
   }
 
   // Call this method to start the bot.
@@ -43,6 +44,8 @@ class Bot extends EventEmitter {
     };
 
     if (this.options.cacheSessions) {
+      console.log('Caching sessions.');
+
       try {
         botOptions.session = await getValidSession(this.options.username, this.options.password);
       } catch (e) {
