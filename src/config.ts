@@ -10,7 +10,7 @@ export const config = {
   SLOWCHAT_ALERT_REGEXP: /^Du kannst nur jede 3 Sekunden schreiben.$/,
   COMMANDSPAM_ALERT_REGEXP: /^Bitte unterlasse das Spammen von Commands!$/,
   PAY_REGXP: /^(.+) \| (\w{1,16}) hat dir \$(\S+) gegeben\.$/,
-  REDSTONE_REGEXP: /^- Redstone( ist wieder | )(\w{9,11})/,
+  REDSTONE_REGEXP: /^- Redstone (?:ist wieder)? (\w+)$/,
   ITEMCLEAR_REGEXP: /^\[GrieferGames\] Warnung: Items auf dem Boden werden in (\w{2}) Sekunden entfernt\!$/,
 
   // Coded expressions

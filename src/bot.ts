@@ -221,16 +221,10 @@ class Bot extends EventEmitter {
     });
 
     this.client.on('itemClearAlert', (seconds: string) => {
-      // Get time until itemclear.
-      // Set action timeout until
-      // the clear happened
       this.emit('itemClearAlert', parseInt(seconds));
     });
 
-    this.client.on('redstoneAlert', (text: string, mode: string) => {
-      // Detect redstone switch
-      // in chat. Return new
-      // redstone state.
+    this.client.on('redstoneAlert', (mode: string) => {
       let redstone = '';
       if (mode.includes('deaktiviert')) {
         redstone = RedstoneMode.OFF;
