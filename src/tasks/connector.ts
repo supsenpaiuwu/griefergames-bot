@@ -8,13 +8,13 @@ import { config } from '../config';
 // ¯\_(ツ)_/¯
 
 function delay(ms: number): Promise<void> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
 function waitForSpawn(bot: Bot): Promise<void> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     bot.client.once('spawn', resolve);
   });
 }
