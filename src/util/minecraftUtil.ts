@@ -59,16 +59,7 @@ function jsonToCodedText(item: JsonChat | JsonChat[] | string): string {
       }
     } else {
       // We're looking at a specific 'extra' item.
-      const {
-        text,
-        color,
-        extra,
-        bold,
-        italic,
-        underlined,
-        strikethrough,
-        obfuscated,
-      } = item;
+      const { text, color, extra, bold, italic, underlined, strikethrough, obfuscated } = item;
 
       if (color) {
         message += ChatCodes[color.toUpperCase()] || '';
@@ -112,11 +103,7 @@ function jsonToText(item: JsonChat | JsonChat[]): string {
 
 // Strips a coded string of its codes.
 function stripCodes(text: string): string {
-  return text.replace(/\u00A7[0-9A-FK-OR]/ig, '');
+  return text.replace(/\u00A7[0-9A-FK-OR]/gi, '');
 }
 
-export {
-  jsonToText,
-  jsonToCodedText,
-  stripCodes,
-};
+export { jsonToText, jsonToCodedText, stripCodes };

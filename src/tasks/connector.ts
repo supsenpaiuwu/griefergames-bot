@@ -7,10 +7,6 @@ import { config } from '../config';
 // due to bad Mineflayer physics.
 // ¯\_(ツ)_/¯
 
-// PS: Don't copy this without giving credits -
-// this was a lot of work to optimize.
-// Thank you!
-
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -37,6 +33,8 @@ const CARDINAL_YAWS = {
   NORTH_EAST: (7 * Math.PI) / 4,
 };
 
+const WIGGLE_INTERVAL = 1000;
+
 async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   const timeout = setTimeout(() => {
     throw new Error('Timed out while connecting on CityBuild.');
@@ -45,21 +43,21 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   let startPos: any;
   let lookDirection: number[];
   switch (options.start) {
-    case 0: // NW
-      startPos = vec3(324, 117, 277);
+    case 0: // SW
+      startPos = vec3(323, 117, 281);
+      lookDirection = [CARDINAL_YAWS.SOUTH_WEST, 0];
+      break;
+    case 1: // NW
+      startPos = vec3(323, 117, 279);
       lookDirection = [CARDINAL_YAWS.NORTH_WEST, 0];
       break;
-    case 1: // NE
-      startPos = vec3(326, 117, 277);
+    case 2: // NE
+      startPos = vec3(327, 117, 279);
       lookDirection = [CARDINAL_YAWS.NORTH_EAST, 0];
       break;
-    case 2: // SE
-      startPos = vec3(326, 117, 283);
+    case 3: // SE
+      startPos = vec3(327, 117, 281);
       lookDirection = [CARDINAL_YAWS.SOUTH_EAST, 0];
-      break;
-    case 3: // SW
-      startPos = vec3(324, 117, 283);
-      lookDirection = [CARDINAL_YAWS.SOUTH_WEST, 0];
       break;
     default:
       throw new Error('Start position not provided! Check path file.');
@@ -106,10 +104,38 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   bot.client.setControlState('sprint', true);
   bot.client.setControlState('forward', true);
   bot.client.setControlState('jump', true);
-  await waitForSpawn(bot);
+  await delay(1000);
 
   bot.client.clearControlStates();
+
+  const stopWiggle = wiggle(bot);
+
+  await waitForSpawn(bot);
+
+  stopWiggle();
   clearTimeout(timeout);
+}
+
+function wiggle(bot: Bot): () => void {
+  function moveLeft() {
+    bot.client.setControlState('left', true);
+  }
+
+  function moveRight() {
+    bot.client.setControlState('right', true);
+  }
+
+  let left = true;
+  const interval = setInterval(() => {
+    bot.client.clearControlStates();
+    left ? moveLeft() : moveRight();
+
+    left = !left;
+  }, WIGGLE_INTERVAL);
+
+  return () => {
+    clearInterval(interval);
+  };
 }
 
 export { run as connectorTask };

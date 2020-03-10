@@ -11,6 +11,10 @@ import { config } from './config';
 import { connectorTask } from './tasks/connector';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
+const defaultOptions = {
+  cacheSessions: true,
+};
+
 class Bot extends EventEmitter {
   public client: any;
   public connectionStatus = ConnectionStatus.NOT_STARTED;
@@ -22,10 +26,7 @@ class Bot extends EventEmitter {
 
   constructor(options: Options) {
     super();
-    this.options = options;
-    if (options.cacheSessions) {
-      console.log('Caching sessions.');
-    }
+    this.options = { ...defaultOptions, ...options };
   }
 
   // Call this method to start the bot.
@@ -43,6 +44,8 @@ class Bot extends EventEmitter {
     };
 
     if (this.options.cacheSessions) {
+      console.log('Caching sessions.');
+
       try {
         botOptions.session = await getValidSession(this.options.username, this.options.password);
       } catch (e) {
@@ -82,19 +85,19 @@ class Bot extends EventEmitter {
     }
   }
 
-  public sendChat(text: string, sendNext?: boolean): Promise<void> {
+  public sendChat(text: string, sendNext?: boolean): Promise<String> {
     return this.send(text, sendNext);
   }
 
-  public sendCommand(command: string, sendNext?: boolean): Promise<void> {
+  public sendCommand(command: string, sendNext?: boolean): Promise<String> {
     return this.send(`/${command}`, sendNext);
   }
 
-  public sendMsg(re: string, text: string, sendNext?: boolean): Promise<void> {
+  public sendMsg(re: string, text: string, sendNext?: boolean): Promise<String> {
     return this.send(`/msg ${re} ${text}`, sendNext);
   }
 
-  public pay(re: string, amount: number, sendNext?: boolean): Promise<void> {
+  public pay(re: string, amount: number, sendNext?: boolean): Promise<String> {
     return this.send(`/pay ${re} ${amount}`, sendNext);
   }
 
@@ -291,7 +294,7 @@ class Bot extends EventEmitter {
 
     this.client.chat(text);
     this.messageLastSentTime = Date.now();
-    resolve();
+    resolve(text);
 
     // Determine cooldown until next message.
     if (text.startsWith('/')) {
@@ -323,7 +326,7 @@ class Bot extends EventEmitter {
     }
   }
 
-  private async send(text: string, sendNext?: boolean): Promise<void> {
+  private async send(text: string, sendNext?: boolean): Promise<String> {
     // Makes sure the bot is truthy and
     // that its connectionStatus is logged in.
     if (!this.isOnline()) {
@@ -345,7 +348,7 @@ class Bot extends EventEmitter {
     if (sinceLast >= this.chatDelay) {
       this.client.chat(text);
       this.messageLastSentTime = Date.now();
-      return; // Resolves promise instantly.
+      return Promise.resolve(text);
     }
 
     const untilNext = this.chatDelay - sinceLast;
@@ -359,14 +362,14 @@ class Bot extends EventEmitter {
     return this.addToQueue(text);
   }
 
-  private addToQueue(text: string): Promise<void> {
-    return new Promise(resolve => {
+  private addToQueue(text: string): Promise<String> {
+    return new Promise((resolve) => {
       this.chatQueue.push([text, resolve]);
     });
   }
 
-  private sendNext(text: string): Promise<void> {
-    return new Promise(resolve => {
+  private sendNext(text: string): Promise<String> {
+    return new Promise((resolve) => {
       // Place at the start of the array.
       this.chatQueue = [[text, resolve], ...this.chatQueue];
     });
