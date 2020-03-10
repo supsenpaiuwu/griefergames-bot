@@ -6,7 +6,7 @@ import { EventEmitter } from 'events';
 
 import { getValidSession } from './sessionHandler';
 import { Session, Options, ConnectorOptions } from './interfaces';
-import { ChatMode, ConnectionStatus } from './enums';
+import { ChatMode, ConnectionStatus, RedstoneMode } from './enums';
 import { config } from './config';
 import { connectorTask } from './tasks/connector';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
@@ -177,6 +177,8 @@ class Bot extends EventEmitter {
     this.client.chatAddPattern(config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
     this.client.chatAddPattern(config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
     this.client.chatAddPattern(config.COMMANDSPAM_ALERT_REGEXP, 'commandSpamAlert');
+    this.client.chatAddPattern(config.ITEMCLEAR_REGEXP, 'itemClearAlert');
+    this.client.chatAddPattern(config.REDSTONE_REGEXP, 'redstoneAlert');
 
     this.client.on('msg', (rank: string, username: string, message: string) => {
       this.emit('msg', rank, username, message);
@@ -216,6 +218,20 @@ class Bot extends EventEmitter {
       // shortly after connecting.
       this.chatDelay = config.SLOW_COOLDOWN;
       console.warn('Sent commands too quickly!');
+    });
+
+    this.client.on('itemClearAlert', (seconds: string) => {
+      this.emit('itemClearAlert', parseInt(seconds));
+    });
+
+    this.client.on('redstoneAlert', (mode: string) => {
+      let redstone = '';
+      if (mode.includes('deaktiviert')) {
+        redstone = RedstoneMode.OFF;
+      } else if (mode.includes('aktiviert')) {
+        redstone = RedstoneMode.ON;
+      }
+      this.emit('redstoneAlert', redstone);
     });
 
     this.client.on('connect', () => {
