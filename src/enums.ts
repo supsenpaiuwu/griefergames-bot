@@ -11,7 +11,4 @@ enum ConnectionStatus {
   RESTARTING = 'RESTARTING',
 }
 
-export {
-  ChatMode,
-  ConnectionStatus,
-};
+export { ChatMode, ConnectionStatus };

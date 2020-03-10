@@ -363,13 +363,13 @@ class Bot extends EventEmitter {
   }
 
   private addToQueue(text: string): Promise<String> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.chatQueue.push([text, resolve]);
     });
   }
 
   private sendNext(text: string): Promise<String> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // Place at the start of the array.
       this.chatQueue = [[text, resolve], ...this.chatQueue];
     });
