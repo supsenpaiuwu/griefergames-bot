@@ -2,9 +2,13 @@ export interface Options {
   username: string;
   password: string;
   cacheSessions?: boolean;
-  logMessages?: boolean;
+  logMessages?: boolean | LogMessagesOptions;
   additionalChatDelay?: number;
   // proxy?: Proxy
+}
+
+export interface LogMessagesOptions {
+  type: 'uncoded' | 'encoded' | 'ansi';
 }
 
 // export interface Proxy {
