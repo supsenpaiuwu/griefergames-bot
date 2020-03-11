@@ -242,6 +242,18 @@ class Bot extends EventEmitter {
       });
     });
 
+    this.client.on('windowOpen', async (window) => {
+      let title = JSON.parse(window.title);
+      if (window.type == 6) {
+        if (title.includes('§cAfk?')) {
+          if (this.options.solveAfkChallenge) {
+            await this.antiAFK(window);
+            this.emit('afk');
+          }
+        }
+      }
+    });
+
     this.client._client.once('session', () => {
       const session: Session = this.client._client.session;
 
@@ -306,6 +318,35 @@ class Bot extends EventEmitter {
       if (metadata.name === 'scoreboard_team' && data.name === 'Kontostandcheck') {
         this.emit('scoreboardBalance', data.prefix);
       }
+    });
+  }
+
+  private antiAFK(window) {
+    return new Promise(async (resolve) => {
+      const items = Object.entries(window.containerItems());
+      const slot = items[0][1].slot;
+      await this.clickItem(slot);
+      await this.closeWindow();
+      resolve();
+    });
+  }
+
+  private clickItem(slot) {
+    return new Promise((resolve) => {
+      this.client.clickWindow(slot, 0, 0, resolve);
+    });
+  }
+
+  private closeWindow() {
+    return new Promise((resolve) => {
+      this.client.once('windowClose', (window) => {
+        let title = JSON.parse(window.title);
+        if (window.type == 6) {
+          if (title.toString().includes('§cAfk?')) {
+            resolve();
+          }
+        }
+      });
     });
   }
 

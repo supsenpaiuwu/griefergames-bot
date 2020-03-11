@@ -4,6 +4,7 @@ export interface Options {
   cacheSessions?: boolean;
   logMessages?: boolean | LogMessagesOptions;
   additionalChatDelay?: number;
+  solveAfkChallenge: boolean;
   // proxy?: Proxy
 }
 
