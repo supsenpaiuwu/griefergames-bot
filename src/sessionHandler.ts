@@ -5,7 +5,13 @@ import mojang from 'mojang';
 import { Session } from './interfaces';
 
 function buildPath(email: string): string {
-  return path.join(__dirname, `../sessions/session-${email.toLowerCase()}.json`);
+  const folderPath = path.join(__dirname, '../sessions/');
+
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+  }
+
+  return path.join(folderPath, `session-${email.toLowerCase()}.json`);
 }
 
 async function create(email: string, password: string): Promise<Session> {
