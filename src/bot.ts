@@ -5,7 +5,7 @@ import path from 'path';
 import { EventEmitter } from 'events';
 
 import { getValidSession } from './sessionHandler';
-import { Session, Options, ConnectorOptions } from './interfaces';
+import { Session, Options, ConnectorOptions, LogMessagesOptions } from './interfaces';
 import { ChatMode, ConnectionStatus, RedstoneMode } from './enums';
 import { config } from './config';
 import { connectorTask } from './tasks/connector';
@@ -266,14 +266,26 @@ class Bot extends EventEmitter {
     });
 
     this.client.on('message', (message: any) => {
-      if (this.options.logMessages) {
-        console.log(message.toAnsi());
-      }
-
       // Convert JSON chat to a coded string...
       // Trim just to be safe with our RegExp.
       const codedText = jsonToCodedText(message.json).trim();
       const text = stripCodes(codedText);
+
+      if (typeof this.options.logMessages === 'boolean') {
+        if (this.options.logMessages) {
+          console.log(message.toAnsi());
+        }
+      } else if (typeof this.options.logMessages === 'object') {
+        const logMessagesOptions = this.options.logMessages as LogMessagesOptions;
+
+        if (logMessagesOptions.type === 'uncoded') {
+          console.log(text);
+        } else if (logMessagesOptions.type === 'encoded') {
+          console.log(codedText);
+        } else if (logMessagesOptions.type === 'ansi') {
+          console.log(message.toAnsi());
+        }
+      }
 
       // Check for fake money
       const fakeCheck = codedText.match(config.CODED_PAY_REGEXP);
