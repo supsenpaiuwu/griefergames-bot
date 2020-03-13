@@ -9,6 +9,7 @@ import { Session, Options, ConnectorOptions, LogMessagesOptions } from './interf
 import { ChatMode, ConnectionStatus, RedstoneMode } from './enums';
 import { config } from './config';
 import { connectorTask } from './tasks/connector';
+import { solveAfkChallengeTask } from './tasks/solve-afk-challenge';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
 const defaultOptions = {
@@ -240,6 +241,24 @@ class Bot extends EventEmitter {
         // and spawned in hub.
         this.emit('ready');
       });
+    });
+
+    this.client.on('windowOpen', (window) => {
+      this.emit('windowOpen', window);
+
+      if (this.options.solveAfkChallenge) {
+        let title = JSON.parse(window.title);
+
+        if (window.type == 6 && title && title.includes('§cAfk?')) {
+          solveAfkChallengeTask(this, window)
+            .then(() => {
+              this.emit('solvedAfkChallenge');
+            })
+            .catch((e) => {
+              console.error('Failed solving AFK challenge.');
+            });
+        }
+      }
     });
 
     this.client._client.once('session', () => {
