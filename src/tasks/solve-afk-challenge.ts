@@ -1,7 +1,7 @@
 import { Bot } from '../bot';
 
 async function run(bot: Bot, window: any) {
-  const items = Object.entries(window.containerItems());
+  const items: any = Object.entries(window.containerItems());
   const slot = items[0][1].slot;
 
   try {
