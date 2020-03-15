@@ -85,7 +85,9 @@ bot.on('ready', () => {
 ```
 
 ## Roadmap
-- Full documentation
+
+Check the Umbrella Issue:
+https://github.com/derjp/griefergames/issues/22
 
 ## Support
 
