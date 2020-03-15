@@ -243,6 +243,14 @@ class Bot extends EventEmitter {
       });
     });
 
+    this.client.on('playerCollect', (collector: any, collected: any) => {
+      if (collector.username === this.client.username) {
+        this.emit('botCollect', collector, collected);
+      } else {
+        this.emit('playerCollect', collector, collected);
+      }
+    });
+
     this.client.on('windowOpen', (window) => {
       this.emit('windowOpen', window);
 
