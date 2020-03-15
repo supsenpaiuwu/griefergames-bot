@@ -137,7 +137,6 @@ class Bot extends EventEmitter {
     navigatePlugin(mineflayer)(this.client);
     this.client.navigate.blocksToAvoid[44] = true;
     this.client.navigate.blocksToAvoid[156] = true;
-    this.client.navigate.blocksToAvoid[171] = true;
   }
 
   private registerEvents(): void {

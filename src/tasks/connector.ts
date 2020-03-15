@@ -94,20 +94,24 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   try {
     await bot.client.navigate.promise.to(frontPos);
   } catch (e) {
-    throw new Error('Stuck in connector.');
+    if (bot.client.entity.position.y == frontPos.y) {
+      await bot.client.naviate.promise.to(frontPos);
+    } else {
+      throw new Error('Stuck in connector.');
+    }
   }
   await delay(2000);
 
   const [portalX, portalY, portalZ] = options.portal;
   const portalPos = vec3(portalX, portalY, portalZ);
   bot.client.lookAt(portalPos, true);
+  bot.client.setControlState('jump', true);
+  await delay(25);
   bot.client.setControlState('sprint', true);
   bot.client.setControlState('forward', true);
-  bot.client.setControlState('jump', true);
-  await delay(1000);
+  await delay(2500);
 
   bot.client.clearControlStates();
-
   const stopWiggle = wiggle(bot);
 
   await waitForSpawn(bot);
