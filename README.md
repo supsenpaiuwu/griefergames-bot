@@ -27,7 +27,7 @@ Find this module on [npm](https://www.npmjs.com/package/griefergames).
 
 ## Installation
 
-> This package is currently not hosted on npm. Consider cloning this repository and installing the package manually, instead.
+> ⚠️ This package is currently not hosted on npm. Consider cloning this repository and installing the package manually, instead.
 
 This is a [Node.js](https://nodejs.org/) module available through the [npm registry](https://www.npmjs.com/).
 
@@ -83,6 +83,9 @@ bot.on('ready', () => {
     });
 });
 ```
+
+## Roadmap
+- Full documentation
 
 ## Support
 
