@@ -16,5 +16,5 @@ export const config = {
   // Coded expressions
   // These only match if tested against coded messages.
   // §f, §l, §r, etc.
-  CODED_PAY_REGEXP: /^(.+) \| (\w{1,16}) §ahat dir \$(\S+) gegeben\.$/,
+  CODED_PAY_REGEXP: /^(.+) \| (.+) §ahat dir \$(\S+) gegeben\.$/,
 };
