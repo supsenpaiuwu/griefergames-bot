@@ -45,7 +45,7 @@ class Bot extends EventEmitter {
     };
 
     if (this.options.cacheSessions) {
-      console.log('Caching sessions.');
+      //console.log('Caching sessions.');
 
       try {
         botOptions.session = await getValidSession(this.options.username, this.options.password);

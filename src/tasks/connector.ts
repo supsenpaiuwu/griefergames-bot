@@ -36,9 +36,9 @@ const CARDINAL_YAWS = {
 const WIGGLE_INTERVAL = 1000;
 
 async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
-  const timeout = setTimeout(() => {
+  /*const timeout = setTimeout(() => {
     throw new Error('Timed out while connecting on CityBuild.');
-  }, config.PORTAL_TIMEOUT);
+  }, config.PORTAL_TIMEOUT);*/
 
   let startPos: any;
   let lookDirection: number[];
@@ -117,7 +117,7 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   await waitForSpawn(bot);
 
   stopWiggle();
-  clearTimeout(timeout);
+  //clearTimeout(timeout);
 }
 
 function wiggle(bot: Bot): () => void {
@@ -139,6 +139,7 @@ function wiggle(bot: Bot): () => void {
 
   return () => {
     clearInterval(interval);
+    bot.client.clearControlStates();
   };
 }
 
