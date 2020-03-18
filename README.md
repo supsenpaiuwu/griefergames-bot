@@ -8,8 +8,6 @@ A high-level package for easily creating bots for the Minecraft network **Griefe
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
-Find this module on [npm](https://www.npmjs.com/package/griefergames).
-
 [Twitter](https://twitter.com/derjp_) |
 [npm](https://www.npmjs.com/~derjp) |
 [Forums](https://griefergames.de/index.php?user/6076-derjp/)
