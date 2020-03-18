@@ -117,6 +117,7 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   await waitForSpawn(bot);
 
   stopWiggle();
+  bot.client.clearControlStates();
   //clearTimeout(timeout);
 }
 
@@ -139,7 +140,6 @@ function wiggle(bot: Bot): () => void {
 
   return () => {
     clearInterval(interval);
-    bot.client.clearControlStates();
   };
 }
 
