@@ -27,14 +27,25 @@ Find this module on [npm](https://www.npmjs.com/package/griefergames).
 
 ## Installation
 
-> ⚠️ This package is currently not hosted on npm. Consider cloning this repository and installing the package manually, instead.
-
-This is a [Node.js](https://nodejs.org/) module available through the [npm registry](https://www.npmjs.com/).
-
-Installation is done using the [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+First clone the repository and go into directory.
 
 ```bash
-$ npm install griefergames
+$ git clone https://github.com/Dominic11/griefergames.git
+$ cd griefergames
+```
+
+Install dependencies and compile using [TypeScript](https://www.typescriptlang.org/index.html#download-links).
+
+```bash
+$ npm install
+$ tsc
+```
+
+Install the module in project.
+
+```bash
+$ cd ..
+$ npm install --save ./griefergames
 ```
 
 ## Quick Start
@@ -84,17 +95,12 @@ bot.on('ready', () => {
 });
 ```
 
-## Roadmap
-
-Check the Umbrella Issue:
-https://github.com/derjp/griefergames/issues/22
-
 ## Support
 
 You will probably have some questions at some point of using this package.
 
 The type definitions give away most of the functionality of the package. You can check these manually, or, if you are using an IDE with code suggestion functionality, such as IntelliSense, it will also list all available methods for you.
-If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/derjp/gg/issues)!
+If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/Dominic11/griefergames/issues)!
 
 ## License
 
