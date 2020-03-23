@@ -4,7 +4,7 @@ export const config = {
   NORMAL_COOLDOWN: 3050,
   SLOW_COOLDOWN: 4050,
   PORTAL_COOLDOWN: 12000,
-  PORTAL_TIMEOUT: 40000,
+  PORTAL_TIMEOUT: 60000,
   MSG_REGEXP: /^\[(\w+) \| (\w{1,16}) -> mir\] (.+)$/,
   CHATMODE_ALERT_REGEXP: /^Der Chat wurde von (\w+) \| (\w{1,16}) (.+)\.$/,
   SLOWCHAT_ALERT_REGEXP: /^Du kannst nur jede 3 Sekunden schreiben.$/,
