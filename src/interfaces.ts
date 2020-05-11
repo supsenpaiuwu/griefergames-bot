@@ -1,6 +1,8 @@
 export interface Options {
-  username: string;
-  password: string;
+  username?: string;
+  password?: string;
+  // for mcleaks my fork of minecraft-protocol (https://github.com/Dominic11/node-minecraft-protocol) is needed
+  mcLeaksToken?: string;
   cacheSessions?: boolean;
   logMessages?: boolean | LogMessagesOptions;
   additionalChatDelay?: number;

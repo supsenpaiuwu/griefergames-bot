@@ -44,7 +44,7 @@ class Bot extends EventEmitter {
       checkTimeoutInterval: 30000,
     };
 
-    if (this.options.cacheSessions) {
+    if (this.options.cacheSessions && !this.options.mcLeaksToken) {
       //console.log('Caching sessions.');
 
       try {
@@ -55,6 +55,7 @@ class Bot extends EventEmitter {
     } else {
       botOptions.username = this.options.username;
       botOptions.password = this.options.password;
+      botOptions.mcLeaksToken = this.options.mcLeaksToken;
     }
 
     this.client = mineflayer.createBot(botOptions);
