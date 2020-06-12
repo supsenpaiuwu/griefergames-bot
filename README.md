@@ -8,10 +8,6 @@ A high-level package for easily creating bots for the Minecraft network **Griefe
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
-[Twitter](https://twitter.com/derjp_) |
-[npm](https://www.npmjs.com/~derjp) |
-[Forums](https://griefergames.de/index.php?user/6076-derjp/)
-
 ## Features
 
 - Supports Promises/Async-Await
