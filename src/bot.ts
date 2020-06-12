@@ -19,7 +19,7 @@ const defaultOptions = {
 class Bot extends EventEmitter {
   public client: any;
   public connectionStatus = ConnectionStatus.NOT_STARTED;
-  private options: Options;
+  public options: Options;
   private chatQueue = [];
   private currentChatMode = ChatMode.NORMAL;
   private chatDelay = config.NORMAL_COOLDOWN;
@@ -77,7 +77,7 @@ class Bot extends EventEmitter {
     try {
       connectorOptions = await this.loadConnectorOptions(dest);
     } catch (e) {
-      throw new Error(`Could not load options for given CityBuild ('${dest}').`);
+      throw new Error(`There is no CityBuild named '${dest}'.`);
     }
 
     try {

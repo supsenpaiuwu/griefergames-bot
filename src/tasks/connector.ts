@@ -1,7 +1,7 @@
 import vec3 from 'vec3';
 import { Bot } from '../bot';
 import { ConnectorOptions } from '../interfaces';
-import { config } from '../config';
+//import { config } from '../config';
 
 // An overwhelming amount of code
 // due to bad Mineflayer physics.
@@ -36,9 +36,9 @@ const CARDINAL_YAWS = {
 const WIGGLE_INTERVAL = 1000;
 
 async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
-  const timeout = setTimeout(() => {
+  /*const timeout = setTimeout(() => {
     throw new Error('Timed out while connecting on CityBuild.');
-  }, config.PORTAL_TIMEOUT);
+  }, config.PORTAL_TIMEOUT);*/
 
   let startPos: any;
   let lookDirection: number[];
@@ -70,7 +70,7 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   try {
     await bot.client.navigate.promise.to(startPos);
   } catch (e) {
-    clearTimeout(timeout);
+    //clearTimeout(timeout);
     throw new Error('Stuck in connector.');
   }
   await delay(500);
@@ -119,7 +119,7 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
 
   stopWiggle();
   if(bot.client != null) bot.client.clearControlStates();
-  clearTimeout(timeout);
+  //clearTimeout(timeout);
 }
 
 function wiggle(bot: Bot): () => void {
