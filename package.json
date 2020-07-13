@@ -25,6 +25,7 @@
   "author": "DerJP <dev@derjp.de>",
   "license": "MIT",
   "dependencies": {
+    "minecraft-protocol": "git+https://github.com/Neocraftr/node-minecraft-protocol.git",
     "mineflayer": "^2.11.0",
     "mineflayer-navigate-promise": "^0.2.0",
     "mojang": "^2.2.2",
