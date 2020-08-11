@@ -19,29 +19,6 @@ Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 - Useful events - react to private messages, money transfers etc.
 - Make use of the complete feature set of Mineflayer - this package only adds functionality
 
-## Installation
-
-First clone the repository and go into directory.
-
-```bash
-$ git clone https://github.com/Dominic11/griefergames.git
-$ cd griefergames
-```
-
-Install dependencies and compile using [TypeScript](https://www.typescriptlang.org/index.html#download-links).
-
-```bash
-$ npm install
-$ tsc
-```
-
-Install the module in project.
-
-```bash
-$ cd ..
-$ npm install --save ./griefergames
-```
-
 ## Quick Start
 
 Importing the package:
@@ -62,6 +39,9 @@ Creating a bot:
 const bot = createBot({
   username: 'email@example.com',
   password: 'password',
+  // or
+  mcLeaksToken: 'token',
+  
   cacheSessions: true,
   logMessages: true,
 });
@@ -94,8 +74,8 @@ bot.on('ready', () => {
 You will probably have some questions at some point of using this package.
 
 The type definitions give away most of the functionality of the package. You can check these manually, or, if you are using an IDE with code suggestion functionality, such as IntelliSense, it will also list all available methods for you.
-If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/Dominic11/griefergames/issues)!
+If you end up stuck though, don't hesitate to open a new issue directly on [GitHub](https://github.com/Neocraftr/griefergames-bot/issues)!
 
 ## License
 
-[MIT](https://github.com/derjp/griefergames/blob/master/LICENSE)
+[MIT](https://github.com/Neocraftr/griefergames-bot/blob/master/LICENSE.md)
