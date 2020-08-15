@@ -8,6 +8,8 @@ A high-level package for easily creating bots for the Minecraft network **Griefe
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
+**Disclaimer:** You could get banned by using the bot.
+
 ## Features
 
 - Supports Promises/Async-Await
