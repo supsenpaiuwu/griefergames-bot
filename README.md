@@ -44,13 +44,13 @@ Creating a bot:
 
 ```javascript
 const bot = createBot({
+  // Authentication with Mojang account
   username: 'email@example.com',
   password: 'password',
-  // or
+  // or MCLeaks.net
   mcLeaksToken: 'token',
   
-  cacheSessions: true,
-  logMessages: true,
+  logMessages: true
 });
 
 // This is async (returns a promise)
