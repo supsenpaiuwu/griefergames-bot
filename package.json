@@ -6,16 +6,15 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "prepare": "cross-env NODE_ENV=production npm run build",
-    "install": "npm run build",
     "build": "tsc"
   },
-  "homepage": "https://github.com/Neocraftr/griefergames#readme",
+  "homepage": "https://github.com/Neocraftr/griefergames-bot#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Neocraftr/griefergames.git"
+    "url": "git+https://github.com/Neocraftr/griefergames-bot.git"
   },
   "bugs": {
-    "url": "https://github.com/Neocraftr/griefergames/issues"
+    "url": "https://github.com/Neocraftr/griefergames-bot/issues"
   },
   "keywords": [
     "bot",

@@ -3,4 +3,3 @@ sessions/*
 tests/
 tslint.json
 graveyard
-dist/

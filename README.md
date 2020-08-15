@@ -19,6 +19,11 @@ Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 - Useful events - react to private messages, money transfers etc.
 - Make use of the complete feature set of Mineflayer - this package only adds functionality
 
+## Installation
+```bash
+npm install https://github.com/Neocraftr/griefergames-bot.git
+```
+
 ## Quick Start
 
 Importing the package:
