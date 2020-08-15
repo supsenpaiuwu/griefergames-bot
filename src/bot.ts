@@ -14,7 +14,8 @@ import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
 const defaultOptions = {
   cacheSessions: true,
-  setPortalTimeout: true
+  setPortalTimeout: true,
+  solveAfkChallenge: true
 };
 
 class Bot extends EventEmitter {
@@ -43,6 +44,7 @@ class Bot extends EventEmitter {
       port: config.SERVER_PORT,
       version: 1.8, // TODO: Test if 1.12 is more stable.
       checkTimeoutInterval: 30000,
+      logErrors: false
     };
 
     if (this.options.cacheSessions && !this.options.mcLeaksToken) {
@@ -58,7 +60,7 @@ class Bot extends EventEmitter {
       botOptions.password = this.options.password;
       botOptions.mcLeaksToken = this.options.mcLeaksToken;
     }
-
+    
     this.client = mineflayer.createBot(botOptions);
 
     this.registerEvents();

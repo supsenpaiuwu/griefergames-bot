@@ -17,7 +17,8 @@ const solve_afk_challenge_1 = require("./tasks/solve-afk-challenge");
 const minecraftUtil_1 = require("./util/minecraftUtil");
 const defaultOptions = {
     cacheSessions: true,
-    setPortalTimeout: true
+    setPortalTimeout: true,
+    solveAfkChallenge: true
 };
 class Bot extends events_1.EventEmitter {
     constructor(options) {
@@ -37,6 +38,7 @@ class Bot extends events_1.EventEmitter {
             port: config_1.config.SERVER_PORT,
             version: 1.8,
             checkTimeoutInterval: 30000,
+            logErrors: false
         };
         if (this.options.cacheSessions && !this.options.mcLeaksToken) {
             try {
