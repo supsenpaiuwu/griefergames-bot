@@ -14,6 +14,7 @@ import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
 const defaultOptions = {
   cacheSessions: true,
+  setPortalTimeout: true
 };
 
 class Bot extends EventEmitter {

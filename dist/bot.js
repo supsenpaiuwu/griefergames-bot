@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bot = exports.createBot = void 0;
 const mineflayer_1 = __importDefault(require("mineflayer"));
 const mineflayer_navigate_promise_1 = __importDefault(require("mineflayer-navigate-promise"));
 const fs_1 = __importDefault(require("fs"));
@@ -16,6 +17,7 @@ const solve_afk_challenge_1 = require("./tasks/solve-afk-challenge");
 const minecraftUtil_1 = require("./util/minecraftUtil");
 const defaultOptions = {
     cacheSessions: true,
+    setPortalTimeout: true
 };
 class Bot extends events_1.EventEmitter {
     constructor(options) {

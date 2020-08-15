@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.connectorTask = void 0;
 const vec3_1 = __importDefault(require("vec3"));
+const config_1 = require("../config");
 function delay(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -26,23 +28,29 @@ const CARDINAL_YAWS = {
 };
 const WIGGLE_INTERVAL = 1000;
 async function run(bot, options) {
+    let timeout;
+    if (bot.options.setPortalTimeout) {
+        timeout = setTimeout(() => {
+            throw new Error('Timed out while connecting on CityBuild.');
+        }, config_1.config.PORTAL_TIMEOUT);
+    }
     let startPos;
     let lookDirection;
     switch (options.start) {
         case 0:
-            startPos = vec3_1.default(323, 117, 281);
+            startPos = vec3_1.default([323, 117, 281]);
             lookDirection = [CARDINAL_YAWS.SOUTH_WEST, 0];
             break;
         case 1:
-            startPos = vec3_1.default(323, 117, 279);
+            startPos = vec3_1.default([323, 117, 279]);
             lookDirection = [CARDINAL_YAWS.NORTH_WEST, 0];
             break;
         case 2:
-            startPos = vec3_1.default(327, 117, 279);
+            startPos = vec3_1.default([327, 117, 279]);
             lookDirection = [CARDINAL_YAWS.NORTH_EAST, 0];
             break;
         case 3:
-            startPos = vec3_1.default(327, 117, 281);
+            startPos = vec3_1.default([327, 117, 281]);
             lookDirection = [CARDINAL_YAWS.SOUTH_EAST, 0];
             break;
         default:
@@ -55,6 +63,9 @@ async function run(bot, options) {
         await bot.client.navigate.promise.to(startPos);
     }
     catch (e) {
+        if (bot.options.setPortalTimeout) {
+            clearTimeout(timeout);
+        }
         throw new Error('Stuck in connector.');
     }
     await delay(500);
@@ -72,7 +83,7 @@ async function run(bot, options) {
     bot.client.clearControlStates();
     await delay(2000);
     const [frontX, frontY, frontZ] = options.front;
-    const frontPos = vec3_1.default(frontX, frontY, frontZ);
+    const frontPos = vec3_1.default([frontX, frontY, frontZ]);
     try {
         await bot.client.navigate.promise.to(frontPos);
     }
@@ -86,7 +97,7 @@ async function run(bot, options) {
     }
     await delay(2000);
     const [portalX, portalY, portalZ] = options.portal;
-    const portalPos = vec3_1.default(portalX, portalY, portalZ);
+    const portalPos = vec3_1.default([portalX, portalY, portalZ]);
     await new Promise(resolve => {
         bot.client.lookAt(portalPos, true, resolve);
     });
@@ -101,6 +112,9 @@ async function run(bot, options) {
     stopWiggle();
     if (bot.client != null)
         bot.client.clearControlStates();
+    if (bot.options.setPortalTimeout) {
+        clearTimeout(timeout);
+    }
 }
 exports.connectorTask = run;
 function wiggle(bot) {

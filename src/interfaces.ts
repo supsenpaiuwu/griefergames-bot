@@ -1,12 +1,13 @@
 export interface Options {
   username?: string;
   password?: string;
-  // for mcleaks my fork of minecraft-protocol (https://github.com/Dominic11/node-minecraft-protocol) is needed
+  // for mcleaks my fork of minecraft-protocol (https://github.com/Neocraftr/node-minecraft-protocol) is needed
   mcLeaksToken?: string;
   cacheSessions?: boolean;
   logMessages?: boolean | LogMessagesOptions;
   additionalChatDelay?: number;
   solveAfkChallenge?: boolean;
+  setPortalTimeout?: boolean;
   // proxy?: Proxy
 }
 
@@ -42,4 +43,5 @@ export interface ConnectorOptions {
   start: number;
   front: number[];
   portal: number[];
+  timeout: boolean;
 }

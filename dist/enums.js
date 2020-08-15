@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.RedstoneMode = exports.ConnectionStatus = exports.ChatMode = void 0;
 var ChatMode;
 (function (ChatMode) {
     ChatMode[ChatMode["NORMAL"] = 0] = "NORMAL";

@@ -6,6 +6,7 @@ export interface Options {
     logMessages?: boolean | LogMessagesOptions;
     additionalChatDelay?: number;
     solveAfkChallenge?: boolean;
+    setPortalTimeout?: boolean;
 }
 export interface LogMessagesOptions {
     type: 'uncoded' | 'encoded' | 'ansi';
@@ -29,4 +30,5 @@ export interface ConnectorOptions {
     start: number;
     front: number[];
     portal: number[];
+    timeout: boolean;
 }

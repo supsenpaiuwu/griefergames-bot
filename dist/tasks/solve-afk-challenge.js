@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.solveAfkChallengeTask = void 0;
 async function run(bot, window) {
     const items = Object.entries(window.containerItems());
     const slot = items[0][1].slot;

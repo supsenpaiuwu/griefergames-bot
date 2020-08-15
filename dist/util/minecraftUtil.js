@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.stripCodes = exports.jsonToCodedText = exports.jsonToText = void 0;
 var ChatCodes;
 (function (ChatCodes) {
     ChatCodes["BLACK"] = "\u00A70";
