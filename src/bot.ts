@@ -183,9 +183,19 @@ class Bot extends EventEmitter {
     this.client.chatAddPattern(config.COMMANDSPAM_ALERT_REGEXP, 'commandSpamAlert');
     this.client.chatAddPattern(config.ITEMCLEAR_REGEXP, 'itemClearAlert');
     this.client.chatAddPattern(config.REDSTONE_REGEXP, 'redstoneAlert');
+    this.client.chatAddPattern(config.TPA_REGEXP, 'tpa');
+    this.client.chatAddPattern(config.TPAHERE_REGEXP, 'tpahere');
 
     this.client.on('msg', (rank: string, username: string, message: string) => {
       this.emit('msg', rank, username, message);
+    });
+
+    this.client.on('tpa', (rank: string, username: string) => {
+      this.emit('tpa', rank, username);
+    });
+
+    this.client.on('tpahere', (rank: string, username: string) => {
+      this.emit('tpahere', rank, username);
     });
 
     this.client.on('chatModeAlert', (rank: string, username: string, change: string) => {

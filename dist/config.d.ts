@@ -12,5 +12,7 @@ export declare const config: {
     PAY_REGXP: RegExp;
     REDSTONE_REGEXP: RegExp;
     ITEMCLEAR_REGEXP: RegExp;
+    TPA_REGEXP: RegExp;
+    TPAHERE_REGEXP: RegExp;
     CODED_PAY_REGEXP: RegExp;
 };

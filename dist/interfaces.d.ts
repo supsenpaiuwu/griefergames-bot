@@ -30,5 +30,4 @@ export interface ConnectorOptions {
     start: number;
     front: number[];
     portal: number[];
-    timeout: boolean;
 }

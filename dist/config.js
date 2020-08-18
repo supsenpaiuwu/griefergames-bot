@@ -15,6 +15,8 @@ exports.config = {
     PAY_REGXP: /^(.+) \u2503 (\u007E?\u0021?\w{1,16}) hat dir \$(\S+) gegeben\.$/,
     REDSTONE_REGEXP: /^- Redstone (?:ist wieder )?(\w+)\!?$/,
     ITEMCLEAR_REGEXP: /^\[GrieferGames\] Warnung: Items auf dem Boden werden in (\w{2}) Sekunden entfernt\!$/,
-    CODED_PAY_REGEXP: /^(.+) \u2503 (.+) §ahat dir \$(\S+) gegeben\.$/,
+    TPA_REGEXP: /^([A-Za-z\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob er sich zu dir teleportieren darf.$/,
+    TPAHERE_REGEXP: /^([A-Za-z\\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob du dich zu ihm teleportierst.$/,
+    CODED_PAY_REGEXP: /^(.+) \u2503 (.+) §ahat dir \$(\S+) gegeben\.$/
 };
 //# sourceMappingURL=config.js.map
