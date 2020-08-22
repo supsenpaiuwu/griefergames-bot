@@ -6,10 +6,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectorTask = void 0;
 const vec3_1 = __importDefault(require("vec3"));
 const config_1 = require("../config");
+let spawned = false;
 function delay(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
+}
+function checkIfSpawned() {
+    return new Promise((resolve) => {
+        const interval = setInterval(() => {
+            if (spawned) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 100);
+    });
+}
+function listenForSpawn(bot) {
+    spawned = false;
+    bot.client.once('spawn', () => spawned = true);
 }
 function waitForSpawn(bot) {
     return new Promise((resolve) => {
@@ -59,6 +74,7 @@ async function run(bot, options) {
     bot.sendCommand('portal');
     await waitForSpawn(bot);
     await delay(3000);
+    listenForSpawn(bot);
     try {
         await bot.client.navigate.promise.to(startPos);
     }
@@ -108,7 +124,7 @@ async function run(bot, options) {
     await delay(2500);
     bot.client.clearControlStates();
     const stopWiggle = wiggle(bot);
-    await waitForSpawn(bot);
+    await checkIfSpawned();
     stopWiggle();
     if (bot.client != null)
         bot.client.clearControlStates();

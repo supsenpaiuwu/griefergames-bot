@@ -7,10 +7,28 @@ import { config } from '../config';
 // due to bad Mineflayer physics.
 // ¯\_(ツ)_/¯
 
+let spawned = false;
+
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+}
+
+function checkIfSpawned(): Promise<void> {
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if(spawned) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
+}
+
+function listenForSpawn(bot: any) {
+  spawned = false;
+  bot.client.once('spawn', () => spawned = true);
 }
 
 function waitForSpawn(bot: Bot): Promise<void> {
@@ -70,6 +88,8 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   await waitForSpawn(bot);
   await delay(3000);
 
+  listenForSpawn(bot);
+
   try {
     await bot.client.navigate.promise.to(startPos);
   } catch (e) {
@@ -124,7 +144,7 @@ async function run(bot: Bot, options: ConnectorOptions): Promise<void> {
   bot.client.clearControlStates();
   const stopWiggle = wiggle(bot);
 
-  await waitForSpawn(bot);
+  await checkIfSpawned();
 
   stopWiggle();
   if(bot.client != null) bot.client.clearControlStates();
