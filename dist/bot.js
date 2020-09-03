@@ -140,15 +140,20 @@ class Bot extends events_1.EventEmitter {
             this.emit('kicked', reason, loggedIn);
         });
         this.client.chatAddPattern(config_1.config.MSG_REGEXP, 'msg');
+        this.client.chatAddPattern(config_1.config.PLOTCHAT_REGEXP, 'plotchat');
         this.client.chatAddPattern(config_1.config.CHATMODE_ALERT_REGEXP, 'chatModeAlert');
         this.client.chatAddPattern(config_1.config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
         this.client.chatAddPattern(config_1.config.COMMANDSPAM_ALERT_REGEXP, 'commandSpamAlert');
         this.client.chatAddPattern(config_1.config.ITEMCLEAR_REGEXP, 'itemClearAlert');
+        this.client.chatAddPattern(config_1.config.ITEMCLEAR_REGEXP, 'mobClearAlert');
         this.client.chatAddPattern(config_1.config.REDSTONE_REGEXP, 'redstoneAlert');
         this.client.chatAddPattern(config_1.config.TPA_REGEXP, 'tpa');
         this.client.chatAddPattern(config_1.config.TPAHERE_REGEXP, 'tpahere');
         this.client.on('msg', (rank, username, message) => {
             this.emit('msg', rank, username, message);
+        });
+        this.client.on('plotchat', (plotID, rank, username, message) => {
+            this.emit('plotchat', plotID, rank, username, message);
         });
         this.client.on('tpa', (rank, username) => {
             this.emit('tpa', rank, username);
@@ -182,6 +187,9 @@ class Bot extends events_1.EventEmitter {
         });
         this.client.on('itemClearAlert', (seconds) => {
             this.emit('itemClearAlert', parseInt(seconds));
+        });
+        this.client.on('mobClearAlert', (minutes) => {
+            this.emit('mobClearAlert', parseInt(minutes));
         });
         this.client.on('redstoneAlert', (mode) => {
             let redstone = '';
