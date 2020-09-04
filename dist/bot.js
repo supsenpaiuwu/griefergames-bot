@@ -120,6 +120,7 @@ class Bot extends events_1.EventEmitter {
         this.client.navigate.blocksToAvoid[156] = true;
     }
     registerEvents() {
+        const ChatMessage = require('prismarine-chat')(this.client.version);
         const forward = (e) => {
             this.client.on(e, (...d) => {
                 this.emit(e, ...d);
@@ -272,9 +273,22 @@ class Bot extends events_1.EventEmitter {
                 this.emit('pay', rank, username, amount, text, codedText);
             }
         });
+        this.client._client.on('chat', chatPacket => {
+            let msg;
+            try {
+                msg = new ChatMessage(JSON.parse(chatPacket.message));
+            }
+            catch (e) {
+                msg = new ChatMessage(chatPacket.message);
+            }
+            this.emit('message', msg, chatPacket.position);
+        });
         this.client._client.on('packet', (data, metadata) => {
             if (metadata.name === 'scoreboard_team' && data.name === 'Kontostandcheck') {
                 this.emit('scoreboardBalance', data.prefix);
+            }
+            if (metadata.name === 'scoreboard_team' && data.name === 'server') {
+                this.emit('scoreboardServer', data.prefix);
             }
         });
     }
