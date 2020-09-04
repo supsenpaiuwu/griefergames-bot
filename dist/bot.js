@@ -145,7 +145,7 @@ class Bot extends events_1.EventEmitter {
         this.client.chatAddPattern(config_1.config.SLOWCHAT_ALERT_REGEXP, 'slowChatAlert');
         this.client.chatAddPattern(config_1.config.COMMANDSPAM_ALERT_REGEXP, 'commandSpamAlert');
         this.client.chatAddPattern(config_1.config.ITEMCLEAR_REGEXP, 'itemClearAlert');
-        this.client.chatAddPattern(config_1.config.ITEMCLEAR_REGEXP, 'mobClearAlert');
+        this.client.chatAddPattern(config_1.config.MOBREMOVER_REGEXP, 'mobClearAlert');
         this.client.chatAddPattern(config_1.config.REDSTONE_REGEXP, 'redstoneAlert');
         this.client.chatAddPattern(config_1.config.TPA_REGEXP, 'tpa');
         this.client.chatAddPattern(config_1.config.TPAHERE_REGEXP, 'tpahere');
