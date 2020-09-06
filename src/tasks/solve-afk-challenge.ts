@@ -1,8 +1,8 @@
 import { Bot } from '../bot';
 
 async function run(bot: Bot, window: any) {
-  const items: any = Object.entries(window.containerItems());
-  const slot = items[0][1].slot;
+  const items: any = window.slots;
+  const slot = items[0].slot;
 
   try {
     await waitForClickSlot(bot, slot);

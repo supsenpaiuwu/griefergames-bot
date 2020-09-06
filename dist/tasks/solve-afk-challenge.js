@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.solveAfkChallengeTask = void 0;
 async function run(bot, window) {
-    const items = Object.entries(window.containerItems());
-    const slot = items[0][1].slot;
+    const items = window.slots;
+    const slot = items[0].slot;
     try {
         await waitForClickSlot(bot, slot);
         await waitForCloseWindow(bot);
