@@ -266,7 +266,7 @@ class Bot extends events_1.EventEmitter {
             }
             const fakeCheck = codedText.match(config_1.config.CODED_PAY_REGEXP);
             const payMatches = text.match(config_1.config.PAY_REGXP);
-            if (fakeCheck && payMatches) {
+            if (fakeCheck && payMatches && !codedText.includes('§f §ahat dir $')) {
                 const rank = payMatches[1];
                 const username = payMatches[2];
                 const amount = parseFloat(payMatches[3].replace(/,/g, ''));

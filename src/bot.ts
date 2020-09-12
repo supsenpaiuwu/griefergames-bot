@@ -344,7 +344,7 @@ class Bot extends EventEmitter {
       // Get values
       const payMatches = text.match(config.PAY_REGXP);
 
-      if (fakeCheck && payMatches) {
+      if (fakeCheck && payMatches && !codedText.includes('§f §ahat dir $')) {
         // Received money.
         const rank = payMatches[1];
         const username = payMatches[2];
