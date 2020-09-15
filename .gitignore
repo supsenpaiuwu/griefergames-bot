@@ -1,5 +1,6 @@
 node_modules/
 sessions/*
 tests/
+.vscode/
 tslint.json
 graveyard
