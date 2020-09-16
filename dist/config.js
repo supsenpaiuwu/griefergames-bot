@@ -19,6 +19,6 @@ exports.config = {
     MOBREMOVER_REGEXP: /^\[MobRemover\] Achtung, in (\w{1}) Minuten werden alle Tiere gelöscht\.$/,
     TPA_REGEXP: /^([A-Za-z\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob er sich zu dir teleportieren darf.$/,
     TPAHERE_REGEXP: /^([A-Za-z\\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob du dich zu ihm teleportierst.$/,
-    CODED_PAY_REGEXP: /^(.+) \u2503 (.+) §ahat dir \$(\S+) gegeben\.$/
+    CODED_PAY_REGEXP: /^(.+)\u2503 (.+) §ahat dir \$(\S+) gegeben\.$/
 };
 //# sourceMappingURL=config.js.map
