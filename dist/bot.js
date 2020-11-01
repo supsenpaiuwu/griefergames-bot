@@ -150,6 +150,7 @@ class Bot extends events_1.EventEmitter {
         this.client.chatAddPattern(config_1.config.REDSTONE_REGEXP, 'redstoneAlert');
         this.client.chatAddPattern(config_1.config.TPA_REGEXP, 'tpa');
         this.client.chatAddPattern(config_1.config.TPAHERE_REGEXP, 'tpahere');
+        this.client.chatAddPattern(config_1.config.MONEYDROP_REGEXP, 'moneydrop');
         this.client.on('msg', (rank, username, message) => {
             this.emit('msg', rank, username, message);
         });
@@ -161,6 +162,9 @@ class Bot extends events_1.EventEmitter {
         });
         this.client.on('tpahere', (rank, username) => {
             this.emit('tpahere', rank, username);
+        });
+        this.client.on('moneydrop', (amount) => {
+            this.emit('moneydrop', parseInt(amount));
         });
         this.client.on('chatModeAlert', (rank, username, change) => {
             switch (change) {
