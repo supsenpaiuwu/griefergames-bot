@@ -208,7 +208,7 @@ class Bot extends EventEmitter {
     });
 
     this.client.on('moneydrop', (amount: string) => {
-      this.emit('moneydrop', parseInt(amount));
+      this.emit('moneydrop', parseFloat(amount.replace(/,/g, '')));
     });
 
     this.client.on('chatModeAlert', (rank: string, username: string, change: string) => {

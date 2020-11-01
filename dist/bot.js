@@ -164,7 +164,7 @@ class Bot extends events_1.EventEmitter {
             this.emit('tpahere', rank, username);
         });
         this.client.on('moneydrop', (amount) => {
-            this.emit('moneydrop', parseInt(amount));
+            this.emit('moneydrop', parseFloat(amount.replace(/,/g, '')));
         });
         this.client.on('chatModeAlert', (rank, username, change) => {
             switch (change) {
