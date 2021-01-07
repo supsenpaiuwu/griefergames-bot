@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 import { EventEmitter } from 'events';
 
-import { getValidSession } from './sessionHandler';
 import { Session, Options, ConnectorOptions, LogMessagesOptions } from './interfaces';
 import { ChatMode, ConnectionStatus, RedstoneMode } from './enums';
 import { config } from './config';
@@ -13,9 +12,9 @@ import { solveAfkChallengeTask } from './tasks/solve-afk-challenge';
 import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 
 const defaultOptions = {
-  cacheSessions: true,
   setPortalTimeout: true,
-  solveAfkChallenge: true
+  solveAfkChallenge: true,
+  profilesFolder: path.join(__dirname, '../')
 };
 
 class Bot extends EventEmitter {
@@ -44,22 +43,12 @@ class Bot extends EventEmitter {
       port: config.SERVER_PORT,
       version: 1.8, // TODO: Test if 1.12 is more stable.
       checkTimeoutInterval: 30000,
-      logErrors: false
+      logErrors: false,
+      auth: this.options.auth,
+      profilesFolder: this.options.profilesFolder,
+      username: this.options.username,
+      password: this.options.password
     };
-
-    if (this.options.cacheSessions && !this.options.mcLeaksToken) {
-      //console.log('Caching sessions.');
-
-      try {
-        botOptions.session = await getValidSession(this.options.username, this.options.password);
-      } catch (e) {
-        throw e;
-      }
-    } else {
-      botOptions.username = this.options.username;
-      botOptions.password = this.options.password;
-      botOptions.mcLeaksToken = this.options.mcLeaksToken;
-    }
     
     this.client = mineflayer.createBot(botOptions);
 
