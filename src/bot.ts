@@ -14,6 +14,7 @@ import { jsonToCodedText, stripCodes } from './util/minecraftUtil';
 const defaultOptions = {
   setPortalTimeout: true,
   solveAfkChallenge: true,
+  logMessages: true,
   profilesFolder: path.join(__dirname, '../')
 };
 
@@ -317,22 +318,6 @@ class Bot extends EventEmitter {
       const codedText = jsonToCodedText(message.json).trim();
       const text = stripCodes(codedText);
 
-      if (typeof this.options.logMessages === 'boolean') {
-        if (this.options.logMessages) {
-          console.log(message.toAnsi());
-        }
-      } else if (typeof this.options.logMessages === 'object') {
-        const logMessagesOptions = this.options.logMessages as LogMessagesOptions;
-
-        if (logMessagesOptions.type === 'uncoded') {
-          console.log(text);
-        } else if (logMessagesOptions.type === 'encoded') {
-          console.log(codedText);
-        } else if (logMessagesOptions.type === 'ansi') {
-          console.log(message.toAnsi());
-        }
-      }
-
       // Check for fake money
       const fakeCheck = codedText.match(config.CODED_PAY_REGEXP);
       // Get values
@@ -350,10 +335,32 @@ class Bot extends EventEmitter {
     this.client._client.on('chat', chatPacket => {
       let msg;
       try {
-          msg = new ChatMessage(JSON.parse(chatPacket.message))
+          msg = new ChatMessage(JSON.parse(chatPacket.message));
       } catch (e) {
-          msg = new ChatMessage(chatPacket.message)
+          msg = new ChatMessage(chatPacket.message);
       }
+
+      const codedText = jsonToCodedText(msg.json).trim();
+      const text = stripCodes(codedText);
+
+      if(chatPacket.position != 2) {
+        if (typeof this.options.logMessages === 'boolean') {
+          if (this.options.logMessages) {
+            console.log(msg.toAnsi());
+          }
+        } else if (typeof this.options.logMessages === 'object') {
+          const logMessagesOptions = this.options.logMessages as LogMessagesOptions;
+  
+          if (logMessagesOptions.type === 'uncoded') {
+            console.log(text);
+          } else if (logMessagesOptions.type === 'encoded') {
+            console.log(codedText);
+          } else if (logMessagesOptions.type === 'ansi') {
+            console.log(msg.toAnsi());
+          }
+        }
+      }
+
       // Positions: 0: chat (chat box), 1: system message (chat box), 2: game info (above hotbar)
       this.emit('message', msg, chatPacket.position);
     });

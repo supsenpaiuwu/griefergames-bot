@@ -17,6 +17,7 @@ const minecraftUtil_1 = require("./util/minecraftUtil");
 const defaultOptions = {
     setPortalTimeout: true,
     solveAfkChallenge: true,
+    logMessages: true,
     profilesFolder: path_1.default.join(__dirname, '../')
 };
 class Bot extends events_1.EventEmitter {
@@ -241,23 +242,6 @@ class Bot extends events_1.EventEmitter {
         this.client.on('message', (message) => {
             const codedText = minecraftUtil_1.jsonToCodedText(message.json).trim();
             const text = minecraftUtil_1.stripCodes(codedText);
-            if (typeof this.options.logMessages === 'boolean') {
-                if (this.options.logMessages) {
-                    console.log(message.toAnsi());
-                }
-            }
-            else if (typeof this.options.logMessages === 'object') {
-                const logMessagesOptions = this.options.logMessages;
-                if (logMessagesOptions.type === 'uncoded') {
-                    console.log(text);
-                }
-                else if (logMessagesOptions.type === 'encoded') {
-                    console.log(codedText);
-                }
-                else if (logMessagesOptions.type === 'ansi') {
-                    console.log(message.toAnsi());
-                }
-            }
             const fakeCheck = codedText.match(config_1.config.CODED_PAY_REGEXP);
             const payMatches = text.match(config_1.config.PAY_REGXP);
             if (fakeCheck && payMatches && !codedText.includes('§f §ahat dir $')) {
@@ -274,6 +258,27 @@ class Bot extends events_1.EventEmitter {
             }
             catch (e) {
                 msg = new ChatMessage(chatPacket.message);
+            }
+            const codedText = minecraftUtil_1.jsonToCodedText(msg.json).trim();
+            const text = minecraftUtil_1.stripCodes(codedText);
+            if (chatPacket.position != 2) {
+                if (typeof this.options.logMessages === 'boolean') {
+                    if (this.options.logMessages) {
+                        console.log(msg.toAnsi());
+                    }
+                }
+                else if (typeof this.options.logMessages === 'object') {
+                    const logMessagesOptions = this.options.logMessages;
+                    if (logMessagesOptions.type === 'uncoded') {
+                        console.log(text);
+                    }
+                    else if (logMessagesOptions.type === 'encoded') {
+                        console.log(codedText);
+                    }
+                    else if (logMessagesOptions.type === 'ansi') {
+                        console.log(msg.toAnsi());
+                    }
+                }
             }
             this.emit('message', msg, chatPacket.position);
         });
