@@ -1,5 +1,6 @@
 node_modules/
 launcher_profiles.json
+launcher_accounts.json
 tests/
 .vscode/
 tslint.json
