@@ -367,13 +367,19 @@ class Bot extends EventEmitter {
 
     this.client._client.on('packet', (data: any, metadata: any) => {
       // Emit scoreboard balance updates.
-      if (metadata.name === 'scoreboard_team' && data.name === 'Kontostandcheck') {
-        this.emit('scoreboardBalance', data.prefix);
+      if (metadata.name === 'scoreboard_team' && data.name === 'money_value') {
+        const currentBalance = data.prefix;
+        if(currentBalance != undefined && currentBalance.trim() != '' && !currentBalance.includes('Laden')) {
+          this.emit('scoreboardBalance', currentBalance);
+        }
       }
 
       // Emit scoreboard server updates.
-      if (metadata.name === 'scoreboard_team' && data.name === 'server') {
-        this.emit('scoreboardServer', data.prefix);
+      if (metadata.name === 'scoreboard_team' && data.name === 'server_value') {
+        const serverName = data.prefix.replace(/\u00A7[0-9A-FK-OR]/gi, '');
+        if(serverName != undefined && serverName.trim() != '' && !serverName.includes('Laden')) {
+          this.emit('scoreboardServer', serverName);
+        }
       }
     });
   }

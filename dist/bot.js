@@ -283,11 +283,17 @@ class Bot extends events_1.EventEmitter {
             this.emit('message', msg, chatPacket.position);
         });
         this.client._client.on('packet', (data, metadata) => {
-            if (metadata.name === 'scoreboard_team' && data.name === 'Kontostandcheck') {
-                this.emit('scoreboardBalance', data.prefix);
+            if (metadata.name === 'scoreboard_team' && data.name === 'money_value') {
+                const currentBalance = data.prefix;
+                if (currentBalance != undefined && currentBalance.trim() != '' && !currentBalance.includes('Laden')) {
+                    this.emit('scoreboardBalance', currentBalance);
+                }
             }
-            if (metadata.name === 'scoreboard_team' && data.name === 'server') {
-                this.emit('scoreboardServer', data.prefix);
+            if (metadata.name === 'scoreboard_team' && data.name === 'server_value') {
+                const serverName = data.prefix.replace(/\u00A7[0-9A-FK-OR]/gi, '');
+                if (serverName != undefined && serverName.trim() != '' && !serverName.includes('Laden')) {
+                    this.emit('scoreboardServer', serverName);
+                }
             }
         });
     }
