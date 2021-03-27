@@ -214,7 +214,7 @@ class Bot extends events_1.EventEmitter {
             this.emit('windowOpen', window);
             if (this.options.solveAfkChallenge) {
                 let title = JSON.parse(window.title);
-                if (window.type == 'minecraft:container' && title && title.includes('§cAfk?')) {
+                if (window.type == 'minecraft:container' && title && title.includes('§cAFK?')) {
                     solve_afk_challenge_1.solveAfkChallengeTask(this, window)
                         .then(() => {
                         this.emit('solvedAfkChallenge');
