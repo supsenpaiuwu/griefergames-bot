@@ -8,7 +8,7 @@ A high-level package for easily creating bots for the Minecraft network **Griefe
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
-**Important:** I've reneamed the library from `griefergames` to `griefergames-bot`. If you previously installed it from GitHub you have to reinstall it under this new name and update yout imports.
+**Important:** I've reneamed the library from `griefergames` to `griefergames-bot`. If you previously installed it from GitHub you have to reinstall it under this new name and update your imports.
 
 ## Features
 
