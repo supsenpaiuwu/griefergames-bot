@@ -1,6 +1,6 @@
 <div align="center">
 
-# griefergames
+# griefergames-bot
 
 A high-level package for easily creating bots for the Minecraft network **GrieferGames.net**.
 
@@ -8,7 +8,7 @@ A high-level package for easily creating bots for the Minecraft network **Griefe
 
 Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
-**Disclaimer:** You could get banned by using the bot.
+**Important:** I've reneamed the library from `griefergames` to `griefergames-bot`. If you previously installed it from GitHub you have to reinstall it under this new name and update yout imports.
 
 ## Features
 
@@ -23,6 +23,8 @@ Built upon [mineflayer](https://github.com/PrismarineJS/mineflayer).
 
 ## Installation
 ```bash
+npm install griefergames-bot
+# or the latest beta from gitHub
 npm install https://github.com/Neocraftr/griefergames-bot.git
 ```
 
@@ -31,13 +33,13 @@ npm install https://github.com/Neocraftr/griefergames-bot.git
 Importing the package:
 
 ```javascript
-const gg = require('griefergames');
+const gg = require('griefergames-bot');
 
 // or (using destructuring)
-const { createBot } = require('griefergames');
+const { createBot } = require('griefergames-bot');
 
 // or (using ES6 import)
-import { createBot } from 'griefergames';
+import { createBot } from 'griefergames-bot';
 ```
 
 Creating a bot:
@@ -46,14 +48,14 @@ Creating a bot:
 const bot = createBot({
   // Authentication with Mojang account
   username: 'email@example.com',
-  password: 'password'
+  password: 'password',
   // or Microsoft account
   username: 'email@example.com',
-  password: 'password'
-  auth: 'microsoft'
+  password: 'password',
+  auth: 'microsoft',
   // or MCLeaks.net
   password: 'token',
-  auth: 'mcleaks'
+  auth: 'mcleaks',
   
   logMessages: true
 });
@@ -80,6 +82,9 @@ bot.on('ready', () => {
     });
 });
 ```
+
+## Disclaimer:
+You could get banned by using this bot.
 
 ## Support
 

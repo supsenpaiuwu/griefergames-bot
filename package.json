@@ -1,12 +1,12 @@
 {
-  "name": "griefergames",
+  "name": "griefergames-bot",
   "version": "1.0.0",
   "description": "Easily create bots optimized for GrieferGames.net",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "prepare": "cross-env NODE_ENV=production npm run build",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "tsc"
   },
   "homepage": "https://github.com/Neocraftr/griefergames-bot#readme",
   "repository": {
@@ -22,7 +22,7 @@
     "minecraft",
     "griefergames"
   ],
-  "author": "DerJP <dev@derjp.de>",
+  "author": "Neocraftr <neocraftr@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "minecraft-protocol": "git+https://github.com/Neocraftr/node-minecraft-protocol.git",
@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@types/node": "^10.17.51",
-    "cross-env": "^7.0.3",
     "prettier": "^1.19.1",
     "typescript": "^3.9.7"
   }
